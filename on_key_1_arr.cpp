@@ -97,29 +97,64 @@ template<class T>
 void List<T>::travel(){
 	for (int i = 0; i < length; ++i)
 	{
-		cout << element[i] << " "; 
+		cout << element[i] << "\t"; 
 	}
 	cout << endl;
 };
 
+
+bool Josephus(int n,int s, int m){
+		if ( n<=0 || s<=0 || m<=0)
+		{
+			cout << "输入必须为正值！" << endl;
+			return 0;
+		}
+		
+
+
+		int x = 0;
+		List<int> lst (n);
+		List<int> Josephus (n);
+		int j = 1;
+		for (int i = 1; i <= n; ++i)
+		{
+			lst.Insert(i-1,i);
+		}
+		if (n<s){
+			s = s%n ;
+			cout << "警告 : 起始位置大于人数，将从第 "<<s<<" 人处起始\n\n";
+		}
+		cout <<"\t初始队列：\t";
+		lst.travel();
+		s = s-1;
+		while (!lst.IsEmpty()){	
+			printf("第%d次：\n",j );
+			cout <<"\t当前队列：\t";
+			lst.travel();
+			lst.Delete((s+m-1)%lst.Length(),x);
+			printf("\t从第%d人处起始，经过%d人，第%d人出列，他是：%d \n\n",s+1,m,(s+m-1)%(lst.Length()+1)+1,x);
+			s = (s+m-1)%(lst.Length()+1);
+			Josephus.Insert(j-1,x);
+			j++;
+		}
+		cout <<"Josephus队列：\t";
+		Josephus.travel();
+		cout << endl << endl;
+		return 1;
+
+	};
+
+	
+
+
+
 int main()
 {	
 	
-	List<int> l_int_1 (5);
-	l_int_1.Insert(0,10);
-	l_int_1.Insert(1,20);
-	l_int_1.Insert(2,30);
-	l_int_1.Insert(3,40);
-	int x;
-	cout << "Length = "<< l_int_1.Length() << endl;
-	cout << l_int_1.getValue(3,x) << endl << x<< endl;
-	l_int_1.Delete(1,x);
+	Josephus(5,7,3);
+	
 
-	cout << "Length = "<< l_int_1.Length() << endl;
-	cout << "x = " << x << endl;
-	//printf("%d\n",l_int_1 );
-	int b[10] = {1,2,3,4,5};
-	//cout << int (l_int_1) << endl << b[1] << endl;
 	
 	return 0;
+	
 } 

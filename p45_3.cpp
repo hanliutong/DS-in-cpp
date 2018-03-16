@@ -169,21 +169,21 @@ int lnkList<T> ::  getPos( T value){
 
 
 int main()
-{   
+{
     lnkList<int> link_45_A;
     lnkList<int> link_45_B;
     lnkList<int> link_45_C;
     lnkList<int> link_45_3;
     for (double i = 1; i < 10; ++i)
     {
-       link_45_3.append(i);
+        link_45_3.append(i);
     }
     cout << "原表长 ： " << link_45_3.length() <<endl;
     for (int j = 0; j < link_45_3.length(); ++j) {
         cout << link_45_3.getValue(j)<<" " ;
     }
-       //算法 45-3
-    int min , max , p_int_min , p_int_max;
+    //算法 45-3
+    int min = 0 , max = 0 , p_int_min = 0 , p_int_max = 0;
 
     cout << "min = "; cin >> min;
     p_int_min = link_45_3.getPos(min);
@@ -195,7 +195,7 @@ int main()
 
     for (int i = p_int_min + 1; i < p_int_max; ++i)
     {
-       link_45_3.del(p_int_min + 1);
+        link_45_3.del(p_int_min + 1);
     }
     cout << "删除后表长 ： " << link_45_3.length() <<endl;
     for (int j = 0; j < link_45_3.length(); ++j) {
@@ -204,5 +204,6 @@ int main()
 
     return 0;
 }
+
 
 
