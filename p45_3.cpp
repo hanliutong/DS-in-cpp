@@ -170,11 +170,8 @@ int lnkList<T> ::  getPos( T value){
 
 int main()
 {
-    lnkList<int> link_45_A;
-    lnkList<int> link_45_B;
-    lnkList<int> link_45_C;
     lnkList<int> link_45_3;
-    for (double i = 1; i < 10; ++i)
+    for (int i = 1; i < 10; ++i)
     {
         link_45_3.append(i);
     }

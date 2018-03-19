@@ -105,9 +105,9 @@ void List<T>::travel(){
 int main()
 {	
 	
-	List<int> list_A(10);
-	List<int> list_B(10);
-	List<int> list_C(10);
+	List<int> list_A(10),list_B(10),list_C(10);
+	//List<int> list_B(10);
+	//List<int> list_C(10);
 
 	for (int i = 0; i < 10; ++i)
 	{
@@ -125,7 +125,7 @@ int main()
 	cout << " A: "; list_A.travel(); 
 	cout << " B: "; list_B.travel();
 
-	int x;
+	//int x;
 	int pos_A = 0, pos_B = 0 ,pos_C = 0;
 	int len_A = list_A.Length() , len_B = list_B.Length();
 	int tmp_A = 0, tmp_B = 0;

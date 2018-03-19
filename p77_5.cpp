@@ -19,6 +19,8 @@ public: T 	data;	//数据域
 template <class T>		
 class R_Lnk_QU{	
 private:Link<T> * rear;
+		Link<T> head;
+		int flag;
 		//size = 0
 
 public: 
@@ -33,43 +35,43 @@ public:
 
 template <class T>
 R_Lnk_QU<T> :: R_Lnk_QU(){
-	rear = NULL;
+	
+	head = Link<T>(-1,NULL);
+	rear = &head;
+	rear -> next = &head;
 }
 
 template <class T>
 bool R_Lnk_QU<T> :: enQueue(T item){
-	if (rear == NULL)
-	{
-		rear = new Link<T> (item);
-		rear -> next= rear;
-		return 1;
-
-	}else{
-		Link<T> * new_link;
-		new_link =new Link<T> (item, rear -> next);
-		rear -> next = new_link;
-		rear = new_link; 
+	Link<T> * new_link;
+	new_link =new Link<T> (item, rear -> next);
+	rear -> next = new_link;
+	rear = new_link;
+	flag = 0;
 		return 1;
 	}
-	
-}
 
 template <class T>
 bool R_Lnk_QU<T> :: deQueue(T &item){
-	/*if (rear == NULL)
+	if (flag ==  1)
 	{
-		cout <<"队空不能出队" << endl;
-		item = 0;
+		cout << "err: this queue is empty" << endl;
+		item = -1;
 		return 0;
-	}*/
+	}
+	if (rear -> next -> next == rear)
+	{
+		flag =1;
+	}
 	Link<T> *temp;
-	temp = rear -> next;
-	item = temp -> data;
-	rear ->next = temp -> next;
+	temp = rear -> next -> next;
+	item = temp ->data;
+	rear ->next -> next = temp -> next;
 	delete temp;
-	//if (front == NULL )
-	//{	rear = NULL;}
-
+	if (flag == 1)
+	{
+		rear = &head;
+	}
 	return 1;
 
 }
@@ -80,25 +82,20 @@ int main()
 	R_Lnk_QU<int> QU_5;
 	QU_5.enQueue(1);
 	QU_5.enQueue(2);
+	QU_5.deQueue(x);
+	cout << x<< endl;
+	QU_5.deQueue(x);
+	cout << x<< endl;
+	QU_5.deQueue(x);
+	cout << x<< endl;
+	QU_5.deQueue(x);
+	cout << x<< endl;
 	QU_5.enQueue(3);
-	QU_5.enQueue(4);
-
 	QU_5.deQueue(x);
-	cout << x <<endl;
+	cout << x<< endl;
 
-	QU_5.deQueue(x);
-	cout << x <<endl;
 
-	QU_5.deQueue(x);
-	cout << x <<endl;
-
-	QU_5.enQueue(5);
-
-	QU_5.deQueue(x);
-	cout << x <<endl;
-
-	QU_5.deQueue(x);
-	cout << x <<endl;
+	
 
 	
 	return 0;
