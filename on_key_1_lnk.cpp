@@ -215,7 +215,7 @@ bool Josephus(int n,int s, int m){
 int main()
 {	
 	
-	Josephus(50,2,2);
+	Josephus(5,2,2);
 	
 
 	

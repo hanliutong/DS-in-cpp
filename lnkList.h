@@ -1,6 +1,6 @@
-//
+// UTF-8
 // Created by Hanliutong on 2018/3/21.
-//
+// All rights reserved
 
 #ifndef DS_LNKLIST_H
 #define DS_LNKLIST_H
@@ -158,3 +158,35 @@ void lnkList<T> :: travel(){
 
 
 #endif //DS_LNKLIST_H
+
+// UTF-8
+// Created by Hanliutong on 2018/3/21.
+// All rights reserved
+
+// int main()
+// {   
+//     //类模板:链表(lnkList)的测试程序
+//     int x = 2;
+//     lnkList<int> link_1;
+//     link_1.append(1);
+//     link_1.Insert(1,2);
+//     link_1.append(3);
+//     link_1.Insert(3,4);
+//     link_1.append(5);
+//     cout << "length = "<< link_1.length() << endl;
+//     link_1.del(1);
+//     cout << "1:p = "<< link_1.getPos(x,1) << x << endl
+//          << "2:p = "<< link_1.getPos(x,2) << x << endl
+//          << "5:p = "<< link_1.getPos(x,5) << x << endl;
+//     cout << "'0' :" << link_1.getValue(0,x) << x << endl;
+//     cout << "'1' : "<< link_1.getValue(1,x) << x << endl;
+//     cout << "'2' : "<< link_1.getValue(2,x) << x << endl;
+//     cout << "'4' : "<< link_1.getValue(4,x) << x << endl;
+//     cout << "length = "<< link_1.length() << endl;
+//     cout << "isEmpty = "<< link_1.isEmpty() << endl;
+//     cout << "link_1 : ";
+//     link_1.travle();
+    
+    
+//     return 0;
+// }

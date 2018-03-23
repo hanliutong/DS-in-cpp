@@ -158,6 +158,7 @@ bool lnkList<T> ::  getPos(int &p, T value){
 
 template <class T>
 void lnkList<T> :: travle(){
+    cout << "travle is running \n";
     Link<T> *current = head ->next;
     while (current) 
     {
@@ -175,13 +176,13 @@ int main()
     //类模板:链表(lnkList)的测试程序
     int x = 2;
     lnkList<int> link_1;
-    //link_1.Insert(0,1);
-    //link_1.Insert(1,2);
+    link_1.append(1);
+    link_1.Insert(1,2);
     link_1.append(3);
-    //link_1.Insert(3,4);
-    //link_1.append(5);
+    link_1.Insert(3,4);
+    link_1.append(5);
     cout << "length = "<< link_1.length() << endl;
-    link_1.del(0);
+    link_1.del(1);
     cout << "1:p = "<< link_1.getPos(x,1) << x << endl
          << "2:p = "<< link_1.getPos(x,2) << x << endl
          << "5:p = "<< link_1.getPos(x,5) << x << endl;

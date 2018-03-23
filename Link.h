@@ -1,6 +1,6 @@
-//
+// UTF-8
 // Created by Hanliutong on 2018/3/21.
-//
+// All rights reserved
 
 #ifndef DS_LINK_H
 #define DS_LINK_H
@@ -23,3 +23,7 @@ public: T   data;   //数据域
     };
 };
 #endif //DS_LINK_H
+
+// UTF-8
+// Created by Hanliutong on 2018/3/21.
+// All rights reserved

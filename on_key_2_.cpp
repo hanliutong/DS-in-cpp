@@ -3,6 +3,7 @@
 #include "BinaryTreeNode.h"
 #include <stack> 
 #include <iostream>
+#include "lnkList.h"
 #include <string>
 #include "string.h"
 using namespace std;
@@ -21,7 +22,11 @@ bool isOperator(char &x){
 
 
 bool isDigital(char &x){
-	for (int i = 48; i <= 57; i++)
+	if (int(x) == 46)// '.'
+	{
+		return 1;
+	}
+	for (int i = 48; i <= 57; i++)//0-9
 	{
 		if (int(x) == i)
 		{
@@ -31,13 +36,26 @@ bool isDigital(char &x){
 	return 0;
 }
 
-int  exp10(int &x){
-	int sum = 1;
-	for (int i = 0; i < x; i++)
+double  exp10(int x){
+	double sum = 1.0;
+	if (x >= 0)
 	{
-		sum = sum * 10;
+		for (int i = 0; i < x; i++)
+		{
+			sum = sum * 10;
+		}
+	}else
+	{ 
+		for (int i = 0; i > x; i--)
+		{
+			cout << "1sum = " << sum <<endl; 
+			sum = sum * 0.1;
+			cout << "1sum = " << sum <<endl; 
+		}
+
 	}
-	return sum;
+	return sum;	
+	
 }
 int getlens(string x){
 	int i = 0;
@@ -48,30 +66,69 @@ int getlens(string x){
 	return i + 2;
 }
 
-int getDigital(string x,int &j){
+double getDigital(string x,int &j){
 	cout << "Doing getDigital" <<endl;
 	if (isDigital(x[0]) == 0)
 	{
 		return -1;
 		cout << "err" <<endl;
 	}
-	lnkQueue<int> temp;
+	lnkQueue<double> temp;
 	int i =0;
-	int sum = 0;
-	int y =0;
-		while ( isDigital(x[i]) )
+	double sum = 0;
+	int dot = 0;
+	double y = 0;
+	j=0;
+	if (isDigital(x[j]) == 0)
+	{
+		cout << "err : getDigital error with front is not a digital" <<endl;
+	}
+	while (isDigital(x[j]))
+	{	//cout  << "sum = "<< sum <<endl;
+		if (dot == 0)
 		{
-			temp.enQueue( int(x[i]) -48 );
-			i++;
+			while ( isDigital(x[i]) && x[i] !='.'  )
+			{	cout << "i = " << i <<endl;
+				temp.enQueue( int(x[i]) -48 );
+				i++;
+			}
+			j = i;
+			if (x[i] =='.')
+			{
+				dot = 1;
+				cout << "dot = 1" << x[j] <<endl;
+			}
+			while (i)
+
+			{	
+				cout << "sum = "<< sum <<endl;
+				--i;
+				temp.deQueue(y);
+				sum = sum + y*exp10(i);
+			}
+		} else
+		{	i = j + 1;//从 ‘.’后面开始
+			while ( isDigital(x[i]) && x[i] !='.')
+			{
+				temp.enQueue( int(x[i]) -48 );
+				i++;
+			}
+			int k=i-j-1;
+			cout << "k = " << k << endl;
+			cout << exp10(-1) <<endl;
+			j = i;
+			while (k)
+			{
+				
+				temp.deQueue(y);
+				sum = sum + y*exp10(-k);
+				k--;
+			}
+
 		}
-		j =i ;
-		while (i){
-			--i;
-			temp.deQueue(y);
-			sum = sum + y*exp10(i);
-			
-		}
- 		return sum;
+	}
+	cout  << "sum = "<< sum <<endl;	
+ 	return sum;
  }
 
 int cpr_priority( int int_opr){
@@ -102,18 +159,22 @@ int main()
 		{2,2,2,2,-1,2,2},
 		{0,0,0,0,0,0,1}
 	};
-	string bef = "1/(20-31)+400*505#";
+	string bef = "1.1/(20-0)+400*505#";
 	//string bef = "101/(202-303)+404+505*606#";
 	//string bef = "10+10#";
+	lnkList<string> Postfix;
 	string aft = "";
+	string str_tmp = "";
 	//int n = getlens(bef);//获得字符串长度
 	//cout << "n = " << n << endl;
-	int temp = 0;
+	double temp = 0;
 	int len = 0;
 	while (bef[0] != '#')
 	{
+		cout <<"bef = "<<bef<<endl;
 		temp = getDigital(bef,len);
 		cout << "temp = " << temp << "\t" << endl;
+		Postfix.append( to_string(temp) );
 		aft += to_string(temp);
 		aft += ",";
 		//cout << "bef = " << bef <<endl;
@@ -154,6 +215,9 @@ int main()
 						if (t_opr != 40)// ( 不进表达式
 						{
 							cout << "aft is adding : " << char(t_opr) <<endl;
+							str_tmp = "";
+							str_tmp += char(t_opr);
+							Postfix.append( str_tmp );
 							aft += char(t_opr);
 							aft += ",";
 						}
@@ -176,6 +240,9 @@ int main()
 						}else if (t_opr != 40)
 							{
 								cout << "aft is adding : " << char(t_opr) <<endl;
+								str_tmp = "";
+								str_tmp += char(t_opr);
+								Postfix.append( str_tmp );
 								aft += char(t_opr);
 								aft += ",";
 							}
@@ -195,11 +262,21 @@ int main()
 		if (t_opr != -1)
 		{
 			cout << "aft is adding : " << char(t_opr) <<endl;
+			str_tmp = "";
+			str_tmp += char(t_opr);
+			Postfix.append( str_tmp );
 			aft += char(t_opr);
 			aft += ",";
 		}
 	}
 
 	cout << "后缀表达式aft = " << aft << endl;
+	int length = Postfix.length();
+	cout << "length = " << length << endl;
+	string travel;
+		// Postfix.getValue(0,travel);
+		// cout << travel <<"\t";
+	Postfix.travel();
+
 	return 0;
 }

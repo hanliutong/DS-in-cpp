@@ -1,6 +1,6 @@
-//
+// UTF-8
 // Created by Hanliutong on 2018/3/21.
-//
+// All rights reserved
 
 #ifndef _LIST_H
 #define _LIST_H
@@ -109,3 +109,23 @@ void List<T>::travel(){
 };
 
 #endif //_LIST_H
+
+// UTF-8
+// Created by Hanliutong on 2018/3/21.
+// All rights reserved
+
+// int main()
+// {   //顺序表测试程序    
+//     List<int> l_int_1 (5);
+//     l_int_1.Insert(0,10);
+//     l_int_1.Insert(1,20);
+//     l_int_1.Insert(2,30);
+//     l_int_1.Insert(3,40);
+//     int x;
+//     cout << "Length = "<< l_int_1.Length() << endl;
+//     cout << l_int_1.getValue(3,x) << endl << x<< endl;
+//     l_int_1.Delete(1,x);
+//     cout << "Length = "<< l_int_1.Length() << endl;
+//     cout << "x = " << x << endl;   
+//     return 0;
+// } 
