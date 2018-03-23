@@ -109,9 +109,6 @@ bool Josephus(int n,int s, int m){
 			cout << "输入必须为正值！" << endl;
 			return 0;
 		}
-		
-
-
 		int x = 0;
 		List<int> lst (n);
 		List<int> Josephus (n);

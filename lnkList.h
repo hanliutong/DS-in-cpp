@@ -1,27 +1,16 @@
-#include <iostream>
-using namespace std;
+//
+// Created by Hanliutong on 2018/3/21.
+//
 
-template <class T>      //结点定义、2个构造函数
-class Link{             //结点Link
-public: T   data;   //数据域
-    Link<T> *next;  //指针域，自引用型类型
+#ifndef DS_LNKLIST_H
+#define DS_LNKLIST_H
 
-    Link( T info,  Link<T> *nextValue = NULL) {
-        data = info;
-        next = nextValue;           }
-
-    Link(Link<T> *nextValue) {
-        next = nextValue;           }
-    Link(){
-        T *next;
-    };
-};
-
+#include "Link.h"
 template <class T>
 //class lnkList: public List<T>{
 class lnkList{
 private:  Link<T> *head,*tail;//头指针和尾指针
-           Link<T> *setPos(const int p); //找第p个结点
+    Link<T> *setPos(const int p); //找第p个结点
 public: lnkList( );     //构造函数
     ~lnkList();     //析构函数
     bool  isEmpty( );   //判空
@@ -142,12 +131,12 @@ template<class T>
 bool lnkList<T> ::  getPos(int &p, T value){
     Link<T> *current = head->next;
     int index = 0; // current的索引
-    while (current && current->data != value) 
+    while (current && current->data != value)
     {
-        current = current->next; 
-        ++index ; 
+        current = current->next;
+        ++index ;
     }
-    if (current) 
+    if (current)
     {
         p = index ;
         return 1;
@@ -159,66 +148,13 @@ bool lnkList<T> ::  getPos(int &p, T value){
 template <class T>
 void lnkList<T> :: travel(){
     Link<T> *current = head ->next;
-    while (current) 
+    while (current)
     {
         cout << current ->data <<"\t";
-        current = current->next; 
+        current = current->next;
     }
     cout <<endl;
 }
 
-bool Josephus(int n,int s, int m){
-		if ( n<=0 || s<=0 || m<=0)
-		{
-			cout << "输入必须为正值！" << endl;
-			return 0;
-		}
-		
-		int x = 0;
-		lnkList<int> lst;
-		lnkList<int> Josephus;
-		int j = 1;
-		for (int i = 1; i <= n; ++i)
-		{
-			lst.append(i);
-		}
-		if (n<s){
-			s = s%n ;
-			cout << "警告 : 起始位置大于人数，将从第 "<<s<<" 人处起始\n\n";
-		}
-		cout <<"\t初始队列：\t";
-		lst.travel();
-		s = s-1;
-		while (!lst.isEmpty()){	
-			printf("第%d次：\n",j );
-			cout <<"\t当前队列：\t";
-			lst.travel();
-			lst.getValue((s+m-1)%lst.length(),x);
 
-			lst.del((s+m-1)%lst.length());
-			printf("\t从第%d人处起始，经过%d人，第%d人出列，他是：%d \n\n",s+1,m,(s+m-1)%(lst.length()+1)+1,x);
-			s = (s+m-1)%(lst.length()+1);
-			Josephus.append(x);
-			j++;
-		}
-		cout <<"Josephus队列：\t";
-		Josephus.travel();
-		cout << endl << endl;
-		return 1;
-
-	};
-
-	
-
-
-
-int main()
-{	
-	
-	Josephus(50,2,2);
-	
-
-	
-	return 0;
-	
-} 
+#endif //DS_LNKLIST_H
