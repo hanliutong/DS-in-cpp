@@ -118,7 +118,7 @@ bool lnkList<T> :: getValue(int p, T& value){
     }
     if ( p < 0||p > (count-1) )
     {
-        cout << "illgeal 'p':";
+        //cout << "illgeal 'p':";
         return 0;
     }
     Link<T> *point = setPos( p );

@@ -119,6 +119,7 @@ bool Josephus(int n,int s, int m){
 		}
 		if (n<s){
 			s = s%n ;
+			if (s == 0) s = n;
 			cout << "警告 : 起始位置大于人数，将从第 "<<s<<" 人处起始\n\n";
 		}
 		cout <<"\t初始队列：\t";
@@ -148,7 +149,7 @@ bool Josephus(int n,int s, int m){
 int main()
 {	
 	
-	Josephus(5,7,3);
+	Josephus(5,3,4);
 	
 
 	

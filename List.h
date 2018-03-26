@@ -33,7 +33,7 @@ List<T>:: List(int MaxListSize){
 };
 template<class T>
 bool List<T>::Insert(int k, const T& x){
-    if (k<0 || k>MaxSize)
+    if (k<0 || k>length)
     {
         cout << "err:illegal k" << endl;
         return 0;
