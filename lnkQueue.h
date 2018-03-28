@@ -16,7 +16,7 @@ public:
 	bool enQueue(T item);
 	bool deQueue(T &item);
 	bool getFront(T &item);
-
+	bool isEmpty();
 };
 
 template <class T>
@@ -89,5 +89,11 @@ bool lnkQueue<T> :: getFront(T &item){
 	item = front ->data;
 	return 1;
 
+}
+
+template <class T>
+bool lnkQueue<T>::isEmpty(){
+	if(size == 0) return 1;
+	return 0;
 }
 #endif //_LNKQUEUE_H

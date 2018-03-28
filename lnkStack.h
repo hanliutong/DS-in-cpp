@@ -13,6 +13,7 @@ public:	lnkStack();
 		bool push(T item);
 		bool pop(T& item);
 		bool getTop(T& item);
+		bool isEmpty();
 };
 
 template <class T>
@@ -77,4 +78,9 @@ bool lnkStack<T> :: getTop(T& item){
 	return 1;
 }
 
+template <class T>
+bool lnkStack<T>::isEmpty(){
+	if(size == 0) return 1;
+	return 0;
+}
 #endif //_LNKSTACK_H

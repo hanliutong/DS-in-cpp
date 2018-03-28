@@ -35,7 +35,6 @@ template<class T>
 bool List<T>::Insert(int k, const T& x){
     if (k<0 || k>length)
     {
-        cout << "err:illegal k" << endl;
         return 0;
     }
     for (int i = length - 1; i >= k; --i)
@@ -45,12 +44,11 @@ bool List<T>::Insert(int k, const T& x){
     length++;
     element[k]=x;
     return 1;
-};
+}
 template<class T>
 bool List<T>::Delete(int k, T& x){
     if (k<0 || k>=length)
     {
-        cout << "err:illegal k" << endl;
         x = -1;
         return 0;
         exit (1);
@@ -62,8 +60,7 @@ bool List<T>::Delete(int k, T& x){
     }
     length--;
     return 1;
-
-};
+}
 template<class T>
 int List<T>::getPos(const T& x) const{
     int flag = 0;
@@ -84,7 +81,7 @@ int List<T>::getPos(const T& x) const{
     {
         return -1;
     }
-};
+}
 template<class T>
 bool List<T>::getValue(int k, T& x) const{
     if (k>=0 && k < length)
@@ -106,7 +103,7 @@ void List<T>::travel(){
         cout << element[i] << "\t";
     }
     cout << endl;
-};
+}
 
 #endif //_LIST_H
 

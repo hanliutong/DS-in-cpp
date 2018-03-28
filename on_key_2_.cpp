@@ -1,9 +1,9 @@
-#include "lnkStack.h"
-#include "lnkQueue.h"
-#include "BinaryTreeNode.h"
-#include <stack> 
+	#include "lnkStack.h"
+	#include "lnkQueue.h"
+//#include "BinaryTreeNode.h"
+//#include <stack> 
 #include <iostream>
-#include "lnkList.h"
+	#include "lnkList.h"
 #include <string>
 #include "string.h"
 using namespace std;
@@ -73,9 +73,9 @@ double getDigital(string x,int &j){
 	//cout << "\t\t\tDoing getDigital" <<endl;
 	if (isDigital(x[0]) == 0)
 	{
-		return -1;
 		cout << "err : getDigital error with front is not a digital" <<endl;
 		exit(0);
+		return -1;
 	}
 	lnkQueue<double> temp;
 	lnkStack<double> temp_;
@@ -84,11 +84,7 @@ double getDigital(string x,int &j){
 	int dot = 0;
 	double y = 0;
 	j=0;
-	// if (isDigital(x[j]) == 0)
-	// {
-	// 	cout << "err : getDigital error with front is not a digital" <<endl;
-	// 	exit(0);
-	// }
+
 	while (isDigital(x[j]))
 	{	//cout  << "sum = "<< sum <<endl;
 		if (dot == 0)
@@ -163,17 +159,42 @@ int cpr_priority( int int_opr){
 		case int('(') : return 4;
 		case int(')') : return 5;
 		case int('=') : return 6;
-		default : exit(2);
+		default : exit(0);
 	}
 }
 
+void string_del(string &str, int len){
+	// cout <<"doing string_del\n"; 
+	for (int j = 0; j < len  ; j++)
+		{
 
+			for (int i = 0; i < getlens(str); i++)
+			{
+			str[i] = str[i+1];
+			}
+			//cout << "正在删除" << temp << endl;
+		}
+}
 
+bool getTwoDig(lnkStack<double> &s , double &s1 , double &s2){
+	if (s.isEmpty())
+	{
+		cout << "err : expect digital(s2)\n";
+		exit(0);
+	}
+	s.pop(s2);
+	if (s.isEmpty())
+	{
+		cout << "err : expect digital(s1)\n";
+		exit(0);
+	}
+	s.pop(s1);
+}
 int main()
 
 {	lnkStack<int> oprator;
 	oprator.push(-1);
-	int t_opr = 0;
+	int t_opr = -1;
 	int priority[7][7]={
 		{2,2,0,0,0,2,2},
 		{2,2,0,0,0,2,2},
@@ -183,13 +204,12 @@ int main()
 		{2,2,2,2,-1,2,2},
 		{0,0,0,0,0,0,1}
 	};
-	//string bef = "0.5/20=";
-	string bef = "101/(202-303)+-404)+0.51*606=";
+	//string bef = "0.5/(-20)=";
+	string bef = "101/( 202-303/3)+(0-404)+.1*606=";
 	//string bef = "10+10=";
 	lnkList<string> Postfix;
 	cout << "中缀表达式输入：" << bef <<endl;
-	string cin = bef;
-	string aft = "";
+	string org = bef;
 	string str_tmp = "";
 	//int n = getlens(bef);//获得字符串长度
 	//cout << "n = " << n << endl;
@@ -197,31 +217,16 @@ int main()
 	int len = 0;
 	while (bef[0] != '=')
 	{
-		//cout <<"bef = "<<bef<<endl;
-		temp = getDigital(bef,len);
-		//cout << "temp = " << temp << "\t" << endl;
-		Postfix.append( to_string(temp) );
-		aft += to_string(temp);
-		aft += ",";
-		//cout << "bef = " << bef <<endl;
-		for (int j = 0; j < len  ; j++)//temp的数字被删去
+		if (isDigital(bef[0]))
 		{
+			temp = getDigital(bef,len);
+			Postfix.append( to_string(temp) );
+			string_del(bef,len);
+		}else if(isOperator(bef[0]))
+		{		
 
-			for (int i = 0; i < getlens(bef); i++)
-			{
-			bef[i] = bef[i+1];
-			}
-			//cout << "正在删除" << temp << endl;
-		}
-		//cout << "bef = " << bef <<endl;
-		while (isOperator(bef[0]))
-		{
 			int opr = int(bef[0]);
-			for (int i = 0; i < getlens(bef); i++) //删去符号
-				{
-				bef[i] = bef[i+1];
-				}
-			//cout << "opr = " << char(opr) <<endl;
+			string_del(bef,1);//删去第一个字符（即符号）
 			if (opr == 40)//   ( 就入栈
 				{
 				oprator.push(opr);
@@ -240,12 +245,10 @@ int main()
 						oprator.pop(t_opr);
 						if (t_opr != 40)// ( 不进表达式
 						{
-							//cout << "aft is adding : " << char(t_opr) <<endl;
+							
 							str_tmp = "";
 							str_tmp += char(t_opr);
 							Postfix.append( str_tmp );
-							aft += char(t_opr);
-							aft += ",";
 						}
 					}
 					if (t_opr == -1)//没遇到左括号
@@ -265,40 +268,29 @@ int main()
 							break;
 						}else if (t_opr != 40)
 							{
-								//cout << "aft is adding : " << char(t_opr) <<endl;
 								str_tmp = "";
 								str_tmp += char(t_opr);
 								Postfix.append( str_tmp );
-								aft += char(t_opr);
-								aft += ",";
 							}
 					}
 					oprator.push(opr);
-
-
 				}
-			
-
-
 		}
+		else {cout << "warning : Illegal input has been ignored\n";string_del(bef,1);}
+		//else {cout << "err : Illegal input\n"; exit(0);}
 	}//中值表达式入读结束
-	oprator.getTop(t_opr);
+	oprator.getTop(t_opr);//输出到栈空
 	while(t_opr != -1){
 		oprator.pop(t_opr);
 		if (t_opr != -1)
 		{
-			//cout << "aft is adding : " << char(t_opr) <<endl;
 			str_tmp = "";
 			str_tmp += char(t_opr);
 			Postfix.append( str_tmp );
-			aft += char(t_opr);
-			aft += ",";
 		}
 	}
 
-	cout << "后缀表达式aft : ";
-	// int length = Postfix.length();
-	// cout << "length = " << length << endl;
+	cout << "后缀表达式 : ";
 	Postfix.append("=");
 	Postfix.travel();
 
@@ -312,8 +304,7 @@ int main()
 		switch(temp_Postfix_string[0]){
 			case '+':{
 				//cout << "I found a '+'!\n";
-				s.pop(s2);
-				s.pop(s1);
+				getTwoDig(s,s1,s2);
 				s.push(s1+s2);
 				break;
 			}
@@ -348,7 +339,6 @@ int main()
 			}
 			case '=': 
 			{
-				//cout << "I found a '='!\n"; 
 				s.pop(res); 
 				break;
 			}
@@ -361,7 +351,7 @@ int main()
 			}
 		}
 	}
-	cout << cin << res << endl;
+	cout << org << res << endl;
 
 
 	return 0;
