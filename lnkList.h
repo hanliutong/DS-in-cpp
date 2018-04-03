@@ -1,13 +1,12 @@
 // UTF-8
 // Created by Hanliutong on 2018/3/21.
 // All rights reserved
-
+//没有头节点，头指针指向第一个数据结点
 #ifndef DS_LNKLIST_H
 #define DS_LNKLIST_H
 
 #include "Link.h"
 template <class T>
-//class lnkList: public List<T>{
 class lnkList{
 private:  Link<T> *head,*tail;//头指针和尾指针
     Link<T> *setPos(const int p); //找第p个结点
@@ -72,7 +71,7 @@ bool lnkList<T> ::del(const int i){
 
 template<class T>  //
 bool lnkList<T> :: isEmpty(){
-    if (head==tail)
+    if (head==tail)//头指针=尾指针
     {
         return true;
     }

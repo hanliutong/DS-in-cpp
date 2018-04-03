@@ -14,12 +14,13 @@ public:	lnkStack();
 		bool pop(T& item);
 		bool getTop(T& item);
 		bool isEmpty();
+		int getSize();
 };
 
 template <class T>
 lnkStack<T>::lnkStack(){
 	top = NULL;
-	size =0;
+	size = 0;
 }
 
 template <class T>
@@ -50,7 +51,7 @@ bool lnkStack<T> :: pop(T& item){
 	if ( size == 0)
 	{
 		cout << "栈空不能出栈" << endl;
-		item = 0;
+		//item = 0;
 		return 0;
 	}
 	item = top -> data;
@@ -70,7 +71,7 @@ bool lnkStack<T> :: getTop(T& item){
 	if ( size == 0)
 	{
 		cout << "栈空不能读取"<<endl;
-		item = 0;
+		//item = 0;
 		return 0;
 	}
 	
@@ -83,4 +84,10 @@ bool lnkStack<T>::isEmpty(){
 	if(size == 0) return 1;
 	return 0;
 }
+
+template<class T>
+int lnkStack<T> :: getSize(){
+    return size;
+}
+
 #endif //_LNKSTACK_H

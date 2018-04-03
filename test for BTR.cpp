@@ -86,9 +86,13 @@ bool  BinaryTreeNode<T>::isLeaf()const{
 
 int main(int argc, char const *argv[])
 {
-	int x = 10;
-	BinaryTreeNode<int> A(1);
-	x = A.isLeaf();
+	int x = 0;
+	BinaryTreeNode<int> *A, *B,*C;
+	A = new BinaryTreeNode<int> (1);
+	B = new BinaryTreeNode<int> (2);
+	C = new BinaryTreeNode<int> (3,A,B);
+	//A.setLeftchild(C);
+	cout<< C.leftchild();
 	cout << x << endl;
 
 	return 0;

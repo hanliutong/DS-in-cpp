@@ -1,29 +1,60 @@
 #include <iostream>
-#include "lnkstack.h"
 using namespace std;
-bool getTwoDig(lnkStack<double> &s , double &s1 , double &s2){
-	cout <<s.isEmpty() <<endl;
-	if (s.isEmpty() == 1)
-	{
-		cout << "err : expect digital(s2)\n";
-		exit(0);
+class test_c
+{
+public:
+	test_c(){};
+	~test_c(){};
+	void test(int &x){
+	data = x;
+	point = &x;
+	cout << point <<endl;
+	cout << data << endl;
 	}
-	s.pop(s2);
-	if (s.isEmpty())
-	{
-		cout << "err : expect digital(s1)\n";
-		exit(0);
-	}
-	s.pop(s1);
-}
+	int getData(){return data;};
+	int* getPoint(){return point;};
+private:
+ 	int data;
+	int * point; 
+};
+
+
 int main(int argc, char const *argv[])
-{	double s1 = 0,s2 = 0;
-	lnkStack<double> s;
-	s.push(1);
-	s.push(2);
-	cout <<s.isEmpty() <<endl;
-	getTwoDig(s,s1,s2);
-	cout << s1 <<endl;
-	cout << s2 <<endl;
+{
+	test_c a;
+
+	int one =1;
+	cout << &one << endl;
+	a.test(one);
+	cout << a.getPoint() <<endl;
+	cout << a.getData() << endl;
 	return 0;
 }
+
+
+
+
+template <class T>
+int Tree<T>::count(TreeNode<T>* root){
+	int lc = 0;
+	int rs = 0;
+	if(root){
+		if (root -> pChild){
+			lc = 1;
+			lc += count(root->pChild)
+		}
+		if (root -> pSibling)
+		{
+			rs = 1;
+			rs += count(root -> pSibling)
+		}
+	}else
+	return lc + rs;
+}
+
+int getNum(Tree<T> &tree){
+	if (tree.isEmpty())
+	return 0;
+	return 1 + tree.count(tree.getRoot()); 
+}
+

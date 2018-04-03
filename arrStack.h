@@ -27,7 +27,9 @@ arrStack<T>::arrStack(int size){
 
 template <class T>
 arrStack<T>::arrStack(){
+	maxSize = 10;
 	top = -1;
+	st = new T[10];
 }
 
 template <class T>
@@ -54,7 +56,7 @@ bool arrStack<T>::push(T item){
 template <class T>
 bool arrStack<T>::pop(T& item){
 	if (top == -1){
-		item = -1;
+		
 		return 0;
 	} 
 		
@@ -67,7 +69,8 @@ bool arrStack<T>::pop(T& item){
 template <class T>
 bool arrStack<T>::getTop(T& item){
 	if (top == -1) {
-		item = -1;
+		//item = -1;
+		//不可以这么写，item是T类型
 		return 0;
 	}
 	
