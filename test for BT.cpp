@@ -1,8 +1,8 @@
 #include "lnkStack.h"
 #include "BinaryTreeNode.h"
-// #include "BinaryTreeNode.h"
-// #include "BinaryTree.h"
 #include <iostream>
+#include <cmath>
+#include <string>
 using namespace std;
 
 
@@ -26,15 +26,18 @@ public:
 	void CreateTree(BinaryTreeNode<T> &rootNode, BinaryTreeNode<T> &leftTree, BinaryTreeNode<T> &rightTree);
                // 已知根、左子树、右子树，构造二叉树
 	void CreateTree(BinaryTreeNode<T>* rootNode, BinaryTreeNode<T>* leftTree, BinaryTreeNode<T>* rightTree);
-	void PreOrder(BinaryTreeNode<T>* root); //前序周游bt
-	void InOrder(BinaryTreeNode<T>* root); //中序周游
-	void PostOrder(BinaryTreeNode<T>* root); //后序周游
+	void PreOrder(BinaryTreeNode<T>* root); //前序周游bt 根左右
+	void InOrder(BinaryTreeNode<T>* root); //中序周游 	左根右
+	void PostOrder(BinaryTreeNode<T>* root); //后序周游	左右跟
 	void LevelOrder(BinaryTreeNode<T>* root); //按层次周游
 	void DeleteBinaryTree(BinaryTreeNode<T>* root);//删bt
 	int height();//返回树的高度（只有一个结点的树高是1）
 	int height(BinaryTreeNode<T>* node) ;
 	bool search(BinaryTree<T> tree,T k);
 	bool search(BinaryTreeNode<T>* root , T k);
+	void print();
+	int SetPos(BinaryTreeNode<T> * pointer, int Pos, int Width);//返回最大值
+	int SetRow(BinaryTreeNode<T> * pointer, int Row);//返回最大值
 	// bool search(BinaryTreeNode<T> * root,T k);
 };
 
@@ -51,9 +54,6 @@ template <class T>
 BinaryTreeNode<T>* BinaryTree<T>::Parent(BinaryTreeNode<T>* current){
 	lnkStack<BinaryTreeNode<T>*> aStack;
 	BinaryTreeNode<T>* pointer = root;
-		// cout << "pointer -> left = "<<pointer -> left <<endl;
-		// cout << "pointer -> right = " << pointer -> right << endl;
-		// cout << "current = " << current <<endl;
 	if (pointer == NULL || current == NULL)
 		{
 			cout << "输入/根节点为空，无法找到父节点。" <<endl;
@@ -79,6 +79,42 @@ BinaryTreeNode<T>* BinaryTree<T>::Parent(BinaryTreeNode<T>* current){
 	}
 	return root;
 }
+
+template <class T>
+BinaryTreeNode<T>* RightSibling(BinaryTreeNode<T>* current){
+	// lnkStack<BinaryTreeNode<T>*> aStack;
+	// BinaryTreeNode<T>* pointer = root;
+	// if (pointer == NULL || current == NULL)
+	// 	{
+	// 		cout << "输入/根节点为空，无法找到父节点。" <<endl;
+	// 		return root ;
+	// 	}
+	// BinaryTreeNode<T>* x;
+	// aStack.push(NULL);
+	// while(pointer){
+
+	// 	if (pointer -> left == current)
+	// 	{
+	// 		return pointer -> right;
+	// 	}
+	// 	else if(pointer ->right == current){
+	// 		return NULL;//输入为右子，没有右兄
+	// 	}
+	// 	else
+	// 		{
+	// 		if (pointer -> right != NULL)
+	// 			aStack.push(pointer->right);
+	// 		if (pointer -> left != NULL)
+	// 			pointer = pointer -> left;
+	// 		else{
+	// 			aStack.pop(x);
+	// 			pointer = x;
+	// 			}
+	// 		}
+	// }
+	// return NULL;
+}
+
 template <class T>
 void BinaryTree<T>::PreOrder(BinaryTreeNode<T>* root){ //前序周游bt
 	lnkStack<BinaryTreeNode<T>*> aStack;
@@ -97,6 +133,34 @@ void BinaryTree<T>::PreOrder(BinaryTreeNode<T>* root){ //前序周游bt
 		}
 	}
 	cout << endl;
+}
+
+template <class T>
+void BinaryTree<T>::PostOrder(BinaryTreeNode<T>* root){ //后序周游bt
+	// BinaryTreeNode<T>* pointer = root;
+	if (root -> left)
+	{
+		PostOrder(root -> left);	
+	}
+	if (root -> right)
+	{
+		PostOrder(root -> right);	
+	}
+	cout << root -> info ;
+}
+
+template <class T>
+void BinaryTree<T>::InOrder(BinaryTreeNode<T>* root){ //中序周游bt
+	// BinaryTreeNode<T>* pointer = root;
+	if (root -> left)
+	{
+		InOrder(root -> left);	
+	}
+	cout << root -> pos ;
+	if (root -> right)
+	{
+		InOrder(root -> right);	
+	}
 }
 
 // template <class T>
@@ -188,24 +252,6 @@ bool BinaryTree<T>::search(BinaryTreeNode<T>* root , T k){
 	}
 }
 
-
-// template<class T>
-// bool BinaryTree<T>:: search(BinaryTreeNode<T> * root,T k){
-// 	bool l = 0;
-// 	bool r = 0;
-// 	if (root -> info == k)
-// 	{
-// 		return 1;
-// 	}
-// 	else{
-// 		if (root -> left)
-// 			l = search(root -> left , k);
-// 		if (root -> right)
-// 			r = search(root -> right , k);
-// 		return (r||l);
-// 	}
-// }
-
 template <class T>
 int BinaryTree<T>:: height(BinaryTreeNode<T>* node) 
     {	int l_height = 0;
@@ -224,31 +270,116 @@ int BinaryTree<T>:: height(BinaryTreeNode<T>* node)
         }
     }
 
+template <class T>
+int BinaryTree<T>::SetPos(BinaryTreeNode<T> * pointer,int Pos, int Width){
+	int offset = Width/(2*(pointer->row+2));
+	int temp = Pos + offset;
+	pointer -> pos = Pos;
+	if (pointer -> left)
+	{
+		SetPos(pointer -> left, Pos - offset, Width);
+	}
+	if (pointer -> right)
+	{
+		temp = SetPos(pointer -> right, Pos + offset, Width);
+	}
+	return temp;
+}
+
+template <class T>
+int BinaryTree<T>::SetRow(BinaryTreeNode<T> * pointer,int Row){
+	pointer -> row = Row;
+	int l = 0, r = 0;
+	if (pointer -> left)
+	{
+		l = SetRow(pointer -> left, Row + 1);
+		l++;
+	}
+	if (pointer -> right)
+	{
+		r = SetRow(pointer -> right, Row + 1);
+		r++;
+	}
+	if (r>l)
+	{
+		return r;
+	}
+	return l;
+}
+
+template <class T>
+void BinaryTree<T>::print(){
+	int Row = SetRow(root,0);
+	int Pos = SetPos(root,50,45);
+	cout << "Pos = " << Pos << endl;
+	cout << "Row = " << Row << endl;
+	string str[Pos+1][Row+1] ={""};
+	for (int i = 0; i <= Pos; ++i)
+	{
+		for (int j = 0; j <= Row; ++j)
+		{
+			str[i][j] ={" "};
+		}
+	}
+
+	lnkStack<BinaryTreeNode<T>*> aStack;
+	BinaryTreeNode<T>* pointer = root;
+	BinaryTreeNode<T>* x;
+	aStack.push(NULL);
+	while(pointer){
+		str[pointer->pos][pointer->row] = pointer -> info ;
+		cout << "Pos = " << pointer->pos <<"\tRow = " << pointer->row  <<"\tinfo = " << pointer -> info << endl;
+		if (pointer -> right != NULL)
+			aStack.push(pointer->right);
+		if (pointer -> left != NULL)
+			pointer = pointer -> left;
+		else{
+			aStack.pop(x);
+			pointer = x;
+		}
+	}
+
+	for (int j = 0; j <= Row; ++j)
+	{
+		for (int i = 0; i <= Pos; ++i)
+		{
+			cout << str[i][j];
+		}
+		cout << endl << endl;
+	}
+
+}
+
 int main()
 {
 	
-	BinaryTreeNode<int> a,b,c,d,e;
-	a.setValue(1);
-	b.setValue(2);
-	c.setValue(3);
-	d.setValue(4);
-	e.setValue(5);
+	BinaryTreeNode<string> a,b,c,d,e,f,g;
+	a.setValue("a");
+	b.setValue("b");
+	c.setValue("c");
+	d.setValue("d");
+	e.setValue("e");
+	f.setValue("f");
+	g.setValue("g");
 	cout << "a = " << &a <<endl;
 	cout << "b = " << &b <<endl;
 	cout << "c = " << &c <<endl;
 	cout << "d = " << &d <<endl;
 	cout << "e = " << &e <<endl;
-	BinaryTree<int> T1;
-	BinaryTree<int> T2(&d);
+	BinaryTree<string> T1;
+	BinaryTree<string> T2(&d);
 	T2.CreateTree(a,b,c);
 	c.setRightchild(&d);
+	c.setLeftchild(&f);
 	b.setLeftchild(&e);
-	// d.setRightchild(&e);
+	b.setRightchild(&g);
+	// cout << T2.height(T2.Root())<< endl;
 	cout << T2.Parent(&d) << endl;
-	T2.PreOrder(&a);	
-	cout << T2.height() << endl;
-	cout << T2.search(T2,5) <<endl;
-	cout << T2.height(&a)<<endl;
-	cout << T2.search(T2.Root(),4) << endl;
+	T2.PreOrder(T2.Root());	
+	T2.InOrder(&a); cout << endl;
+	T2.PostOrder(&a); cout << endl;
+	// T2.SetPos(T2.Root(),T2.height());
+	T2.print();
+	T2.InOrder(&a); cout << endl;
 	return 0;
 }

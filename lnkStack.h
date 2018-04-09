@@ -51,7 +51,7 @@ bool lnkStack<T> :: pop(T& item){
 	if ( size == 0)
 	{
 		cout << "栈空不能出栈" << endl;
-		//item = 0;
+		// item = NULL;
 		return 0;
 	}
 	item = top -> data;

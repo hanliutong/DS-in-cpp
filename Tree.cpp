@@ -38,6 +38,7 @@ int Tree<T>::count(TreeNode<T>* root){//pp.159/6:getNum调用的的递归函数
 	int lc = 0;
 	int rs = 0;
 	if(root){
+		cout << root->m_Value << "\t"; 
 		if (root -> pChild){
 			lc = 1;
 			lc += count(root->pChild);
@@ -60,27 +61,40 @@ int Tree<T>::getNum(TreeNode<T>* tree){//pp.159/6 ：输入一个树，求树的
 
 int main(int argc, char const *argv[])
 {
-	TreeNode<int> a,b,c,d,e,f;
-	a.setValue(1); 
-	b.setValue(2); 
-	c.setValue(3); 
-	d.setValue(4); 
-	e.setValue(5); 
-	f.setValue(6); 
+	// TreeNode<int> a,b,c,d,e,f,g;
+	// a.setValue(1); 
+	 // b.setValue(2); 
+	// c.setValue(3); 
+	// d.setValue(4); 
+	// e.setValue(5); 
+	// f.setValue(6); 
+	// g.setValue(7);
 
-	Tree<int> T1(&a);
+	TreeNode<char> a,b,c,d,e,f,g,h;
+	a.setValue('a'); 
+	b.setValue('b'); 
+	c.setValue('c'); 
+	d.setValue('d'); 
+	e.setValue('e'); 
+	f.setValue('f'); 
+	g.setValue('g');
+	h.setValue('h');
+
+	Tree<char> T1(&a);
 	a.setClild(&b);
 	b.setSibling(&c);
 	c.setSibling(&d);
 	c.setClild(&e);
 	e.setSibling(&f);
+	b.setClild(&g);
+	g.setSibling(&h);
 
 	// cout << T1.pChild(&a) << endl;
 	// cout << T1.pSibling(&a) << endl;
-	cout << T1.count(&a) <<endl;
+	// cout << T1.count(&a) <<endl;
 	cout << T1.isEmpty()<<endl;
-	cout << T1.getNum(&a) <<endl;
-
+	// cout << T1.getNum(&a) <<endl;
+	T1.getNum(&a);
 
 	return 0;
 }

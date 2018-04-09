@@ -3,7 +3,10 @@
 #include <iostream>
 #include "lnkList.h"
 #include <string>
+#include <queue>
 #include "string.h"
+#include "BinaryTree.h"
+// #include "stdio.h"
 using namespace std;
 bool isOperator(char &x){
 	//cout << "\t\t\tDoing isOperator\n";
@@ -157,7 +160,7 @@ int cpr_priority( int int_opr){
 		case int('(') : return 4;
 		case int(')') : return 5;
 		case int('=') : return 6;
-		default : exit(0);
+		default : {cout << "err: cpr_priority has an error in default :" << int_opr << "(ASCII)" << endl; exit(0);}
 	}
 }
 
@@ -188,7 +191,8 @@ bool getTwoDig(lnkStack<double> &s , double &s1 , double &s2){
 	}
 	s.pop(s1);
 }
-int main()
+
+void In2Post(string bef, lnkList<string> &Postfix )
 
 {	lnkStack<int> oprator;
 	oprator.push(-1);
@@ -202,15 +206,7 @@ int main()
 		{2,2,2,2,-1,2,2},
 		{0,0,0,0,0,0,1}
 	};
-	// string bef = "0.5/(-20)=";
-	string bef = "101/(202-303/3)+(0-404)+0.1*606=";
-	// string bef = "10+10=";
-	lnkList<string> Postfix;
-	cout << "中缀表达式输入：" << bef <<endl;
-	string org = bef;
 	string str_tmp = "";
-	//int n = getlens(bef);//获得字符串长度
-	//cout << "n = " << n << endl;
 	double temp = 0;
 	int len = 0;
 	while (bef[0] != '=')
@@ -218,7 +214,10 @@ int main()
 		if (isDigital(bef[0]))
 		{
 			temp = getDigital(bef,len);
-			Postfix.append( to_string(temp) );
+			char c[len];
+			sprintf(c, "%.1f", (double)temp);
+			string s = c;
+			Postfix.append( s );
 			string_del(bef,len);
 		}else if(isOperator(bef[0]))
 		{		
@@ -287,68 +286,196 @@ int main()
 		}
 	}
 
-	cout << "后缀表达式 : ";
-	Postfix.append("=");
-	Postfix.travel();
+	// cout << "后缀表达式 : ";
+	// Postfix.travel();
+}
 
+void Post2Tree(lnkList<string> &Postfix, BinaryTree<string> & Tree){
+	lnkStack<BinaryTreeNode<string>*> Node;
 	string temp_Postfix_string;
-	double temp_Postfix_double = 0;
-	int count = 0;
-	double s1 = 0,s2 = 0, res = 0;
-	lnkStack<double> s;//操作数栈s
-	while(Postfix.getValue(0,temp_Postfix_string)){
+	BinaryTree<string> Tree_temp;
+	BinaryTreeNode<string> *Root, *Left, *Right ,*Troot;
+	while (Postfix.getValue(0,temp_Postfix_string )){
 		Postfix.del(0);
-		switch(temp_Postfix_string[0]){
-			case '+':{
-				//cout << "I found a '+'!\n";
-				getTwoDig(s,s1,s2);
-				s.push(s1+s2);
-				break;
+		if (isDigital(temp_Postfix_string[0])){
+			Node.push(new BinaryTreeNode<string> (temp_Postfix_string));
+		}
+		else{
+			Root = new BinaryTreeNode<string> (temp_Postfix_string);
+			if (Node.isEmpty()){
+				cout << "err: Post2Tree error with Node(stack) is empty -Right" <<endl;
+				exit(0);
 			}
-			case '-': {
-				//cout << "I found a '-'!\n";
-				s.pop(s2);
-				s.pop(s1);
-				s.push(s1-s2);
-				break;
+			Node.pop(Right);
+			if (Node.isEmpty()){
+				cout << "err: Post2Tree error with Node(stack) is empty -Left" <<endl;
+				exit(0);
 			}
-			case '*': 
-			{
-				//cout << "I found a '*'!\n";
-				s.pop(s2);
-				s.pop(s1);
-				s.push(s1*s2);
-				break;
-			}
-			case '/': 
-			{
-				//cout << "I found a '/'!\n";
-				s.pop(s2);
-				s.pop(s1);
-				if (s2 == 0.0)
-					{
-						cout << "err: Divide by 0!!!\n";
-						s.clear();
-						exit(0);
-					}
-				else s.push(s1/s2); 
-				break;
-			}
-			case '=': 
-			{
-				s.pop(res); 
-				break;
-			}
-			default : 
-			{
-				temp_Postfix_double = getDigital(temp_Postfix_string,count); 
-				//cout <<"temp_Postfix_double = " << temp_Postfix_double <<endl;
-				s.push(temp_Postfix_double); 
-				break;
-			}
+
+			Node.pop(Left);
+			Tree_temp.CreateTree(Root,Left,Right);
+			Node.push(Root);
+
 		}
 	}
-	cout << org << res << endl;
+	Node.pop(Troot);
+	Tree.CreateTree(Troot);
+
+}
+void Tree2In(BinaryTree<string> &tree){
+
+	BinaryTreeNode<string>* Root = tree.Root();
+	TreeNode2In(Root,0);
+}
+
+void TreeNode2In(BinaryTreeNode<string>*root,bool flag){
+	int priority[4][4]={
+		{1,1,0,0},
+		{1,1,0,0},
+		{2,2,1,1},
+		{2,2,1,1},
+	};
+	if (flag == 1)
+	{
+		cout << "(";
+	}
+	if (root -> left)
+	{	
+		if (isOperator(root -> left -> info[0]) && priority[cpr_priority(int(root->info[0]))][cpr_priority(int(root -> left -> info[0]))] == 2 )
+		{
+			TreeNode2In(root -> left,1);
+		}else{
+			TreeNode2In(root -> left,0);
+		}
+			
+	}
+
+		cout << root -> info << " ";
+	
+	if (root -> right)
+	{
+		if (isOperator(root -> right -> info[0]) && priority[cpr_priority(int(root->info[0]))][cpr_priority(int(root -> right -> info[0]))] == 2 )
+		{
+			TreeNode2In(root -> right,1);
+		}else{
+			TreeNode2In(root -> right,0);
+		}
+	}
+	if (flag == 1)
+		cout << ")";
+}
+
+void Post2Post(string Post, lnkList<string> &Postfix ){
+	double temp = 0;
+	int len = 0;
+
+	while (Post[0] != '='){
+		if (isDigital(Post[0])){
+			temp = getDigital(Post,len);
+			char c[len];
+			sprintf(c, "%.1f", (double)temp);
+			string s = c;
+			Postfix.append( s );
+			string_del(Post,len);
+		}
+		else if (isOperator(Post[0]))
+		{	string str_tmp = "";
+			str_tmp += Post[0];
+			Postfix.append(str_tmp);
+			string_del(Post,1);
+		}
+		else{
+			cout << "warning : Illegal input has been ignored\n";
+			string_del(Post,1);
+		}
+	}
+}
+
+void Pre2Tree(string Post, BinaryTree<string> &t ){
+	lnkStack<string> str_Stack;
+	double temp = 0;
+	int len = 0;
+	while (Post[0] != '='){
+		if (isDigital(Post[0])){
+			temp = getDigital(Post,len);
+			char c[len];
+			sprintf(c, "%.1f", (double)temp);
+			string s = c;
+			str_Stack.push( s );
+			string_del(Post,len);
+		}
+		else if (isOperator(Post[0]))
+		{	string str_tmp = "";
+			str_tmp += Post[0];
+			str_Stack.push(str_tmp);
+			string_del(Post,1);
+		}
+		else{
+			cout << "warning : Illegal input has been ignored\n";
+			string_del(Post,1);
+		}
+	}
+	
+	string pop;
+	lnkStack<BinaryTree<string>> s;
+	
+	while (!str_Stack.isEmpty())
+    {	
+    	str_Stack.pop(pop);
+        if (isDigital(pop[0])) {
+            t.CreateTree(pop, NULL, NULL);
+            s.push(t);
+        } else {
+            BinaryTree<string> t_1;
+            if (s.isEmpty())
+            {
+            	cout << "err!"<<endl;
+            	exit(0);
+            }
+            s.pop(t_1);
+            BinaryTree<string> t_2;
+            if (s.isEmpty())
+            {
+            	cout << "err!"<<endl;
+            	exit(0);
+            }
+            s.pop(t_2);
+            t.CreateTree(pop, &t_1, &t_2);
+            s.push(t);
+        }
+    }
+
+}
+
+int main(){
+	BinaryTree<string> Tree;
+
+
+//————————————————————————————————用户输入——————————————————————————————————————————
+	string str = "- + / 1.0 - 2.0 / 30.0 3.0 + 40.0 55.0 * 0.1 66.0 =";//前缀
+	// string str = "1/(2-30/3)+(40+55)-0.1*66=";//中缀
+	// string str = "1.0 2.0 30.0 3.0 / - / 40.0 55.0 + + 0.1 66.0 * - =";//后缀
+	
+	int input = 0;//0->前缀； 1->中缀； 2->后缀；
+	int output = 1;
+//————————————————————————————————用户输入——————————————————————————————————————————
+
+
+	switch(input){
+		case 0 : {Pre2Tree(str,Tree); break;}
+		case 1 : {lnkList<string> Postfix; In2Post(str,Postfix); Post2Tree(Postfix,Tree);break;}
+		case 2 : {lnkList<string> Postfix; Post2Post(str,Postfix); Post2Tree(Postfix,Tree);break;}
+	}
+
+	Tree.print();
+
+	switch(output){
+		case 0 : {Tree.PreOrder(Tree.Root()); break;}
+		case 1 : {Tree2In(Tree); break;}
+		case 2 : {Tree.PostOrder(Tree.Root());;break;}
+	}
+
+	
 
 
 	return 0;

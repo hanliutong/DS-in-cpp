@@ -8,12 +8,14 @@ class BinaryTree;
 template <class T>
 class BinaryTreeNode {
 friend class BinaryTree<T>;
+friend void TreeNode2In(BinaryTreeNode<string>*root,bool flag);
   //便于BinaryTree访问BinaryTreeNode私有成员
   private:
   			T  info; 	      //二叉树结点数据域
   			BinaryTreeNode<T>* left; //指向左子树的指针；
   			BinaryTreeNode<T>* right; //指向右子树的指针；
-  			//BinaryTreeNode<T>* head;//指向根节点的头指针；
+  			int pos = 0;//该结点的位置，由树中的SetPos函数维护；
+  			int row = 0;//该结点的行，由树中的SetRow函数维护；
   public:  
 	// template <typename X> friend class BinaryTree;
 	BinaryTreeNode( );	      //缺省构造函数
@@ -37,7 +39,7 @@ friend class BinaryTree<T>;
 
 template <class T>
 BinaryTreeNode<T>::BinaryTreeNode(){
-	info = 0;
+	// info = 0;
 	left = right = NULL;
 }
 
