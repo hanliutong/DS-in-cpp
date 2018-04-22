@@ -74,7 +74,6 @@ bool lnkQueue<T> :: deQueue(T &item){
 	if (size == 0)
 	{
 		cout <<"队空不能出队" << endl;
-		item = 0;
 		return 0;
 	}
 	Link<T> *temp;
@@ -96,7 +95,6 @@ bool lnkQueue<T> :: getFront(T &item){
 	if ( size == 0 )
 	{
 		cout <<"队空不能取队头" << endl;
-		item = 0;
 		return 0;
 	}
 	item = front ->data;

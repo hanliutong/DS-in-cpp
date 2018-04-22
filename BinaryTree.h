@@ -106,7 +106,6 @@ void BinaryTree<T>::PreOrder(BinaryTreeNode<T>* root){ //前序周游bt
 
 template <class T>
 void BinaryTree<T>::PostOrder(BinaryTreeNode<T>* root){ //后序周游bt
-	BinaryTreeNode<T>* pointer = root;
 	if (root -> left)
 	{
 		PostOrder(root -> left);	
@@ -120,7 +119,6 @@ void BinaryTree<T>::PostOrder(BinaryTreeNode<T>* root){ //后序周游bt
 
 template <class T>
 void BinaryTree<T>::InOrder(BinaryTreeNode<T>* root){ //中序周游bt
-	BinaryTreeNode<T>* pointer = root;
 	if (root -> left)
 	{
 		InOrder(root -> left);	
@@ -227,13 +225,13 @@ template<class T>
 bool BinaryTree<T>::search(BinaryTreeNode<T>* root , T k){
 	bool r = 0;
 	bool l = 0;
-	if (root -> info== k)	return 1;
+	if (root -> value() == k)	return 1;
 	else{
-		if (root -> right){
-			r = search(root -> right , k);
+		if (root -> rightchild()){
+			r = search(root -> rightchild(), k);
 		}
-		if (root -> left){
-			l = search(root -> left , k);
+		if (root -> leftchild()){
+			l = search(root -> leftchild(), k);
 		}
 		return (r||l);
 	}
@@ -296,20 +294,27 @@ int BinaryTree<T>::SetRow(BinaryTreeNode<T> * pointer,int Row){
 
 template <class T>
 void BinaryTree<T>::print(){
-	int Row = SetRow(root,0);
-	int Pos = SetPos(root,70,70);
+	const int Row = SetRow(root,0);
+	const int Pos = SetPos(root,70,70);
 	// cout << "Pos = " << Pos << endl;
 	// cout << "Row = " << Row << endl;
-	string str[Pos+1][Row+1] ={""};
-	string line[Pos+1][Row+1] ={""};
+	string str[Pos + 1][Row + 1];
+	string line[Pos + 1][Row + 1];
+	// string str[Pos+1][Row+1] ={""};
+	// string line[Pos+1][Row+1] ={""};
 	int line_start = 0, line_end = 0;
-	int cnt[Row] = {0};
+	// int cnt[Row] = {0};
+	int cnt[Row];
+	for (int i = 0; i < Row; i++)
+	{
+		cnt[i] = 0;
+	}
 	for (int i = 0; i <= Pos; ++i)
 	{
 		for (int j = 0; j <= Row; ++j)
 		{
-			str[i][j] ={" "};
-			line[i][j] ={" "};
+			str[i][j] =" ";
+			line[i][j] =" ";
 		}
 	}
 

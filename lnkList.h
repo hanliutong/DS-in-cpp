@@ -25,8 +25,8 @@ public: lnkList( );     //构造函数
 
 template <class T>
 lnkList<T>:: lnkList( ){    //构造函数
-    Link<T> *p;
-    head = tail = new Link<T>(p);       }
+    // Link<T>* p;
+    head = tail = new Link<T>;       }
 
 template <class T>
 lnkList<T>::~lnkList(){     //析构函数

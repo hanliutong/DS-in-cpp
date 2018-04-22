@@ -52,8 +52,7 @@ bool lnkQueue<T> :: enQueue(T item){
 	}
 		size ++ ;
 		return 1;
-
-	}
+}
 
 
 template <class T>
@@ -75,7 +74,6 @@ bool lnkQueue<T> :: deQueue(T &item){
 	}
 	size --;
 	return 1;
-
 }
 
 template <class T>
@@ -87,7 +85,6 @@ bool lnkQueue<T> :: getFront(T &item){
 	}
 	item = front ->data;
 	return 1;
-
 }
 
 template <class T>

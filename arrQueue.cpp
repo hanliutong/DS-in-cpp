@@ -1,5 +1,6 @@
 #include <iostream>
 using namespace std;
+#include <cstdlib>
 
 template <class T>		
 class arrQueue{	
@@ -107,4 +108,5 @@ int main()
 
 
 	return 0;;
+	system("pause");
 }

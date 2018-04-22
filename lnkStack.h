@@ -24,7 +24,9 @@ lnkStack<T>::lnkStack(){
 }
 
 template <class T>
-lnkStack<T>::~lnkStack(){ clear(); }
+lnkStack<T>::~lnkStack(){
+	clear(); 
+}
 
 template<class T>
 void lnkStack<T> :: clear(){
@@ -38,7 +40,6 @@ void lnkStack<T> :: clear(){
 
 template<class T>
 bool lnkStack<T> :: push(T item){
-	//cout << "\t" << item <<" is pushing\t" << "size = " << size << endl;
 	Link<T> *q = new Link<T> (item, top);
 	top = q ;
 	size ++;
@@ -47,20 +48,16 @@ bool lnkStack<T> :: push(T item){
 
 template<class T>
 bool lnkStack<T> :: pop(T& item){
-	//cout << "before size = "<< size << endl;
 	if ( size == 0)
 	{
 		cout << "栈空不能出栈" << endl;
-		// item = NULL;
 		return 0;
 	}
 	item = top -> data;
-	
 	Link<T> *t_del = top;
 	top = top -> next;
 	delete t_del;
 	size --;
-	//cout << "after size = "<< size << endl;
 	return 1;
 	
 }
@@ -71,7 +68,6 @@ bool lnkStack<T> :: getTop(T& item){
 	if ( size == 0)
 	{
 		cout << "栈空不能读取"<<endl;
-		//item = 0;
 		return 0;
 	}
 	

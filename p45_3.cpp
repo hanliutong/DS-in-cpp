@@ -13,7 +13,7 @@ public: T   data;   //数据域
     Link(Link<T> *nextValue) {
         next = nextValue;           }
     Link(){
-        T *next;
+       
     };
 };
 
@@ -37,7 +37,7 @@ public: lnkList( );     //构造函数
 
 template <class T>
 lnkList<T>:: lnkList( ){    //构造函数
-    Link<T> *p;
+    Link<T> p;
     head = tail = new Link<T>(p);       }
 
 
@@ -175,7 +175,7 @@ int main()
     {
         link_45_3.append(i);
     }
-    cout << "原表长 ： " << link_45_3.length() <<endl;
+    cout << "bef : " << link_45_3.length() <<endl;
     for (int j = 0; j < link_45_3.length(); ++j) {
         cout << link_45_3.getValue(j)<<" " ;
     }
@@ -194,7 +194,7 @@ int main()
     {
         link_45_3.del(p_int_min + 1);
     }
-    cout << "删除后表长 ： " << link_45_3.length() <<endl;
+    cout << "after : " << link_45_3.length() <<endl;
     for (int j = 0; j < link_45_3.length(); ++j) {
         cout << link_45_3.getValue(j)<<" " ;
     }

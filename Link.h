@@ -19,7 +19,7 @@ public: T   data;   //数据域
     Link(Link<T> *nextValue) {
         next = nextValue;           }
     Link(){
-        T *next;
+        next = NULL;
     };
 };
 #endif //DS_LINK_H

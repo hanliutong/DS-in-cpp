@@ -3,7 +3,7 @@
 #include <iostream>
 #include "lnkList.h"
 #include <string>
-#include <queue>
+// #include <queue>
 #include "string.h"
 #include "BinaryTree.h"
 // #include "stdio.h"
@@ -140,15 +140,6 @@ double getDigital(string x,int &j){
  	return sum;
  }
 
-double getDigFormLnk(lnkList<string> Pf){
-	cout <<"Doing getDigFormLnk\n";
-	double Postfix_double = 0;
-	string Postfix_srtring;
-	int count = 0;
-	Pf.getValue(0,Postfix_srtring);
-	Postfix_double = getDigital(Postfix_srtring,count);
-	//cout << "Postfix_double" << Postfix_double << endl;
-}
 
 int cpr_priority( int int_opr){
 	switch (int_opr)
@@ -177,7 +168,7 @@ void string_del(string &str, int len){
 		}
 }
 
-bool getTwoDig(lnkStack<double> &s , double &s1 , double &s2){
+void getTwoDig(lnkStack<double> &s , double &s1 , double &s2){
 	if (s.isEmpty())
 	{
 		cout << "err : expect digital(s2)\n";
@@ -446,7 +437,7 @@ void Pre2Tree(string Post, BinaryTree<string> &t ){
     }
 
 }
-
+	lnkList<string> Postfix;
 int main(){
 	BinaryTree<string> Tree;
 
@@ -458,13 +449,20 @@ int main(){
 	
 	int input = 0;//0->前缀； 1->中缀； 2->后缀；
 	int output = 1;
+	// cout << "output = ";
+	// cin >> output;
+	// output = 2;
+
 //————————————————————————————————用户输入——————————————————————————————————————————
 
 
 	switch(input){
 		case 0 : {Pre2Tree(str,Tree); break;}
-		case 1 : {lnkList<string> Postfix; In2Post(str,Postfix); Post2Tree(Postfix,Tree);break;}
-		case 2 : {lnkList<string> Postfix; Post2Post(str,Postfix); Post2Tree(Postfix,Tree);break;}
+		// case 1 : {lnkList<string> Postfix; In2Post(str,Postfix); Post2Tree(Postfix,Tree);break;}
+		// case 2 : {lnkList<string> Postfix; Post2Post(str,Postfix); Post2Tree(Postfix,Tree);break;}
+		case 1 : {In2Post(str,Postfix); Post2Tree(Postfix,Tree);break;}
+		case 2 : {Post2Post(str,Postfix); Post2Tree(Postfix,Tree);break;}
+		default : {cout << "Illegal input" << endl; exit(0);}
 	}
 
 	Tree.print();
@@ -473,10 +471,8 @@ int main(){
 		case 0 : {Tree.PreOrder(Tree.Root()); break;}
 		case 1 : {Tree2In(Tree); break;}
 		case 2 : {Tree.PostOrder(Tree.Root());;break;}
+		default : {cout << "Illegal input" << endl; exit(0);}
 	}
-
-	
-
 
 	return 0;
 }

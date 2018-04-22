@@ -1,11 +1,10 @@
 #include "lnkStack.h"
 #include "lnkQueue.h"
-#include <iostream>
 #include "lnkList.h"
+#include <iostream>
 #include <string>
-#include "string.h"
 using namespace std;
-bool isOperator(char &x){
+bool isOperator(char &x){//O（1）
 	//cout << "\t\t\tDoing isOperator\n";
 	for (int i = 40; i <= 47; i++)
 	{
@@ -17,10 +16,8 @@ bool isOperator(char &x){
 	return 0;
 } 
 
-
-
-bool isDigital(char &x){
-	//cout << "\t\t\tDoing isDigital\n";
+bool isNum(char &x){//O（1）
+	//cout << "\t\t\tDoing isNum\n";
 	if (int(x) == 46)// '.'
 	{
 		return 1;
@@ -35,7 +32,7 @@ bool isDigital(char &x){
 	return 0;
 }
 
-double  exp10(int x){
+double exp10(int x){
 	//cout << "\t\t\tDoing exp10\n";
 	double sum = 1.0;
 	if (x >= 0)
@@ -52,12 +49,11 @@ double  exp10(int x){
 			sum = sum * 0.1;
 			//cout << "1sum = " << sum <<endl; 
 		}
-
 	}
 	return sum;	
-	
 }
-int getlens(string x){
+
+int getlens(string x){//O（1）
 	//cout << "\t\t\tDoing getlens\n";
 	int i = 0;
 	while ( x[i] != '=' )
@@ -67,11 +63,11 @@ int getlens(string x){
 	return i + 2;
 }
 
-double getDigital(string x,int &j){
-	//cout << "\t\t\tDoing getDigital" <<endl;
-	if (isDigital(x[0]) == 0)
+double getNum(string x,int &j){
+	//cout << "\t\t\tDoing getNum" <<endl;
+	if (isNum(x[0]) == 0)
 	{
-		cout << "err : getDigital error with front is not a digital" <<endl;
+		cout << "err : getNum error with front is not a digital" <<endl;
 		exit(0);
 		return -1;
 	}
@@ -83,11 +79,11 @@ double getDigital(string x,int &j){
 	double y = 0;
 	j=0;
 
-	while (isDigital(x[j]))
+	while (isNum(x[j]))
 	{	//cout  << "sum = "<< sum <<endl;
 		if (dot == 0)
 		{
-			while ( isDigital(x[i]) && x[i] !='.'  )
+			while ( isNum(x[i]) && x[i] !='.'  )
 			{	//cout << "i = " << i <<endl;
 				temp.enQueue( int(x[i]) -48 );
 				i++;
@@ -107,7 +103,7 @@ double getDigital(string x,int &j){
 			}
 		} else
 		{	i = j + 1;//从 ‘.’后面开始
-			while ( isDigital(x[i]) && x[i] !='.')
+			while ( isNum(x[i]) && x[i] !='.')
 			{
 				temp_.push( int(x[i]) -48 );
 				i++;
@@ -137,17 +133,9 @@ double getDigital(string x,int &j){
  	return sum;
  }
 
-double getDigFormLnk(lnkList<string> Pf){
-	cout <<"Doing getDigFormLnk\n";
-	double Postfix_double = 0;
-	string Postfix_srtring;
-	int count = 0;
-	Pf.getValue(0,Postfix_srtring);
-	Postfix_double = getDigital(Postfix_srtring,count);
-	//cout << "Postfix_double" << Postfix_double << endl;
-}
 
 int cpr_priority( int int_opr){
+//返回符号在优先级矩阵中的位置
 	switch (int_opr)
 	{
 		case int('+') : return 0;
@@ -165,33 +153,31 @@ void string_del(string &str, int len){
 	// cout <<"doing string_del\n"; 
 	for (int j = 0; j < len  ; j++)
 		{
-
 			for (int i = 0; i < getlens(str); i++)
 			{
 			str[i] = str[i+1];
 			}
-			//cout << "正在删除" << temp << endl;
 		}
 }
 
-bool getTwoDig(lnkStack<double> &s , double &s1 , double &s2){
+void getTwoNum(lnkStack<double> &s , double &s1 , double &s2){
 	if (s.isEmpty())
 	{
-		cout << "err : expect digital(s2)\n";
+		cout << "err : expect number(s2)\n";
 		exit(0);
 	}
 	s.pop(s2);
 	if (s.isEmpty())
 	{
-		cout << "err : expect digital(s1)\n";
+		cout << "err : expect number(s1)\n";
 		exit(0);
 	}
 	s.pop(s1);
 }
-int main()
 
+int main()
 {	lnkStack<int> oprator;
-	oprator.push(-1);
+	oprator.push(-1);//监视
 	int t_opr = -1;
 	int priority[7][7]={
 		{2,2,0,0,0,2,2},
@@ -202,34 +188,34 @@ int main()
 		{2,2,2,2,-1,2,2},
 		{0,0,0,0,0,0,1}
 	};
-	// string bef = "0.5/(-20)=";
-	string bef = "101/(202-303/3)+(0-404)+0.1*606=";
+	// string bef = "1.1.1*10=";
+	// string bef = "20/1+=";
+	string bef = "101/(202-303 / 3)+0.1*61a=";
 	// string bef = "10+10=";
-	lnkList<string> Postfix;
-	cout << "中缀表达式输入：" << bef <<endl;
-	string org = bef;
-	string str_tmp = "";
-	//int n = getlens(bef);//获得字符串长度
-	//cout << "n = " << n << endl;
-	double temp = 0;
+	lnkList<string> Postfix;//用来保存后缀表达式的链表
+	cout << "中缀：" << bef <<endl;
+	string org = bef;//保存输入，用于最后展示结果
+	string str_tmp = "";//操作符暂存
+	double temp = 0;//数字暂存
 	int len = 0;
+//————————————————————————————中缀转后缀————————————————	
 	while (bef[0] != '=')
 	{
-		if (isDigital(bef[0]))
+		if (isNum(bef[0]))//是数字？
 		{
-			temp = getDigital(bef,len);
+			temp = getNum(bef,len);
 			Postfix.append( to_string(temp) );
 			string_del(bef,len);
-		}else if(isOperator(bef[0]))
+		}else if(isOperator(bef[0]))//是符号？
 		{		
 
 			int opr = int(bef[0]);
 			string_del(bef,1);//删去第一个字符（即符号）
-			if (opr == 40)//   ( 就入栈
+			if (opr == 40)//   是左括号就入栈
 				{
 				oprator.push(opr);
 				}
-			else if (opr == 41)
+			else if (opr == 41)//是右括号就去栈里找
 				{
 					oprator.getTop(t_opr);
 					if (t_opr == -1)//栈空 缺少左括号
@@ -255,9 +241,11 @@ int main()
 						exit(0);
 					}
 				}
-			else 
-				{oprator.getTop(t_opr);
-					while (t_opr != -1 && t_opr != 40 && ( priority[cpr_priority(t_opr)][cpr_priority(opr)] != 0 ))
+			else //不是括号
+				{
+					oprator.getTop(t_opr);
+					while (t_opr != -1 && t_opr != 40 && //↓比较优先级
+						( priority[cpr_priority(t_opr)][cpr_priority(opr)] != 0 ))
 					{
 						oprator.pop(t_opr);
 						if (t_opr == -1)
@@ -274,7 +262,10 @@ int main()
 					oprator.push(opr);
 				}
 		}
-		else {cout << "warning : Illegal input has been ignored\n";string_del(bef,1);}
+		else {//既不是数字也不是符号，则跳过
+			cout << "warning : Illegal input has been ignored\n";
+			string_del(bef,1);
+		}
 	}//中值表达式入读结束
 	oprator.getTop(t_opr);//输出到栈空
 	while(t_opr != -1){
@@ -286,70 +277,51 @@ int main()
 			Postfix.append( str_tmp );
 		}
 	}
-
-	cout << "后缀表达式 : ";
+//————————————————————————————后缀表达式求值————————————————
+	cout << "后缀：";
 	Postfix.append("=");
 	Postfix.travel();
 
 	string temp_Postfix_string;
 	double temp_Postfix_double = 0;
 	int count = 0;
-	double s1 = 0,s2 = 0, res = 0;
+	double s1 = 0,s2 = 0, ans = 0;
 	lnkStack<double> s;//操作数栈s
 	while(Postfix.getValue(0,temp_Postfix_string)){
 		Postfix.del(0);
 		switch(temp_Postfix_string[0]){
 			case '+':{
-				//cout << "I found a '+'!\n";
-				getTwoDig(s,s1,s2);
+				getTwoNum(s,s1,s2);
 				s.push(s1+s2);
-				break;
-			}
+				break;}
 			case '-': {
-				//cout << "I found a '-'!\n";
 				s.pop(s2);
 				s.pop(s1);
 				s.push(s1-s2);
-				break;
-			}
-			case '*': 
-			{
-				//cout << "I found a '*'!\n";
+				break;}
+			case '*': {
 				s.pop(s2);
 				s.pop(s1);
 				s.push(s1*s2);
-				break;
-			}
-			case '/': 
-			{
-				//cout << "I found a '/'!\n";
+				break;}
+			case '/': {
 				s.pop(s2);
 				s.pop(s1);
-				if (s2 == 0.0)
-					{
-						cout << "err: Divide by 0!!!\n";
+				if (s2 == 0.0){
+						cout << "err: Divide by 0!\n";
 						s.clear();
-						exit(0);
-					}
+						exit(0);}
 				else s.push(s1/s2); 
-				break;
-			}
-			case '=': 
-			{
-				s.pop(res); 
-				break;
-			}
-			default : 
-			{
-				temp_Postfix_double = getDigital(temp_Postfix_string,count); 
-				//cout <<"temp_Postfix_double = " << temp_Postfix_double <<endl;
+				break;}
+			case '=': {
+				s.pop(ans);
+				break;}
+			default : {
+				temp_Postfix_double = getNum(temp_Postfix_string,count); 
 				s.push(temp_Postfix_double); 
-				break;
-			}
+				break;}
 		}
 	}
-	cout << org << res << endl;
-
-
+	cout <<"结果："<< org << ans << endl;
 	return 0;
 }
