@@ -49,30 +49,6 @@ class Graphl {  //邻接表类
 		    graList = new LList<listUnit>[numVert]; 
 		}
 
-	Edge FirstEdge( int oneVertex ) {
-		Edge myEdge;
-		myEdge.from = oneVertex;
-		Link<listUnit> *temp = graList[oneVertex].head;
-		if (temp->next!= NULL){
-			myEdge.to =temp ->next->element.vertex;
-			myEdge.weight =temp->next->element.weight;
-		}
-		return myEdge;		
-	}
-
-	Edge NextEdge( Edge preEdge){
-		Edge myEdge;
-		myEdge.from = preEdge.from;
-		Link <listUnit> *temp =graList[ preEdge.from].head;
-		while( temp->next!=NULL&&
-			temp->next->element.vertex<=preEdge.to )
-			temp = temp->next;
-		if (temp->next!=NULL){
-			myEdge.to = temp->next->element.vertex;
-			myEdge.weight = temp->next->element.weight; }
-		return myEdge;
-	}
-
 	void setEdge(int from, int to, int weight) {  //设置边  3/4
 		Link<listUnit> *t = graList[ from ].head; //边表首元
 	   	while(t->next != NULL && t->next->element.vertex < to) 
@@ -88,7 +64,7 @@ class Graphl {  //邻接表类
 
 		if ( t->next->element.vertex == to){ //存在此边:改值
 			if (t->next->element.weight == weight)//存在此边
-				return;//退出
+				return;//退出（递归出口）
 			 t->next->element.weight=weight;  
 			 setEdge(to,from,weight);//修改对应的边
 			 return;
@@ -120,6 +96,29 @@ class Graphl {  //邻接表类
 			return;
 		}	
 	}
+		Edge FirstEdge( int oneVertex ) {
+		Edge myEdge;
+		myEdge.from = oneVertex;
+		Link<listUnit> *temp = graList[oneVertex].head;
+		if (temp->next!= NULL){
+			myEdge.to =temp ->next->element.vertex;
+			myEdge.weight =temp->next->element.weight;
+		}
+		return myEdge;		
+	}
+
+	Edge NextEdge( Edge preEdge){
+		Edge myEdge;
+		myEdge.from = preEdge.from;
+		Link <listUnit> *temp =graList[ preEdge.from].head;
+		while( temp->next!=NULL&&
+			temp->next->element.vertex<=preEdge.to )
+			temp = temp->next;
+		if (temp->next!=NULL){
+			myEdge.to = temp->next->element.vertex;
+			myEdge.weight = temp->next->element.weight; }
+		return myEdge;
+	}
 }; 
 
 int main()
@@ -131,7 +130,7 @@ int main()
 	a.setEdge(1,5,5);
 	a.setEdge(3,1,3);
 	a.delEdge(1,3);
-	a.delEdge(1,1);
+	a.delEdge(4,1);
 	Edge e1 = a.FirstEdge(1);
 	Edge e2 = a.NextEdge(e1);
 	Edge e3 = a.NextEdge(e2);

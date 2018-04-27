@@ -1,7 +1,8 @@
 #include <iostream>
+#include <queue>
 using namespace std;
 //邻接表表示有向带权图
-
+enum Mark{UNVISITED,VISITED};
 class Edge{	//边
  public: 
 	int from , to , weight; //起点、终点、权
@@ -16,6 +17,25 @@ class Edge{	//边
 		weight = w;
 	}
 };
+class Graph{
+	public: int numVertex;  int numEdge;  //顶点个数,边数
+		 int *Mark;	int *Indegree;  //访问数组,入度数组
+	Graph( int numVert ){
+		numVertex = numVert;
+		numEdge =0;
+		Indegree =new int[ numVertex ];
+		Mark = new int[ numVertex ];
+		for( int i=0; i<numVertex; i++){
+			Mark[i]=UNVISITED; 	Indegree[i]=0;}	}
+	~Graph( ){ delete [ ] Mark;	delete [ ] Indegree;	}
+	//~Graph( ){ 	}
+	int VerticesNum( ){	return numVertex; }
+	bool IsEdge(Edge oneEdge){  //判断oneEdge是否是边
+		if(oneEdge.weight >=0&&oneEdge.weight<65535
+			&&oneEdge.to>=0)	return true;
+		else return false;		}	};
+
+
 
 
 struct listUnit{  //弧结点的数据域
@@ -40,15 +60,15 @@ template <class Elem> class LList {   //链表头指针类
 		LList(){	head = new Link<Elem>( );	}//附加头结点	
 };
 
-class Graphl {  //邻接表类
+class Graphl: public Graph{  //邻接表类
 	private:
 		LList<listUnit> *graList;  //边链表头指针数组
 	
 	public: 
-	Graphl(int numVert){
+	Graphl(int numVert):Graph(numVert) {
 		    graList = new LList<listUnit>[numVert]; 
 		}
-
+	// ~Graphl(){cout<<"~"<<endl;};
 	Edge FirstEdge( int oneVertex ) {
 		Edge myEdge;
 		myEdge.from = oneVertex;
@@ -81,7 +101,7 @@ class Graphl {  //邻接表类
 			t->next =new Link<listUnit>;  //创建边
 			t->next ->element.vertex =to;
 			t->next->element.weight = weight;
-			// numEdge++; Indegree[to]++; 
+			numEdge++; Indegree[to]++; 
 			return;
 		}
 
@@ -96,7 +116,7 @@ class Graphl {  //邻接表类
 			t->next->element.vertex = to;
 			t->next->element.weight = weight;
 			t->next->next = other;  //新边后继为other
-			// numEdge++; Indegree[to]++; 
+			numEdge++; Indegree[to]++; 
 			return;
 		}
 	}
@@ -112,24 +132,52 @@ class Graphl {  //邻接表类
 			Link<listUnit> *other=temp->next->next; //指后继
 			delete temp->next;  
 			temp->next = other ;  //维护逻辑关系
-			// numEdge--; Indegree[ to]--; 
+			numEdge--; Indegree[ to]--; 
 			return;
 		}	
 	}
+	int ToVertex(Edge e){
+		return e.to;
+	}
+
+
+
 }; 
+
+bool TopsortbyQueue(Graphl& G) {
+	int v = G.VerticesNum();
+	for(int i=0; i<v; i++){
+		G.Mark[i]=UNVISITED;}   //初始化标记数组
+  		queue<int> Q;     //初始化队列     
+	for(int i=0; i<v; i++)  { 
+     if(G.Indegree[i]==0) Q.push(i);  } //入度为0顶点入队
+     while(!Q.empty()){      //如果队列非空
+ 	    int V=Q.front();      Q.pop(); //选  出队
+        G.Mark[V]=VISITED; //访问顶点改标记	
+    for(Edge e=G.FirstEdge(V);G.IsEdge(e);e=G.NextEdge(e))
+      { G.Indegree[G.ToVertex(e)]--;  //删 弧头入度减-1
+        if(G.Indegree[G.ToVertex(e)]==0) //若减至0: 入队 
+		Q.push(G.ToVertex(e));   }    }
+ for(int i=0; i<v; i++)  {
+     if(G.Mark[i]==UNVISITED)
+     	return 0;
+ }
+	return 1;
+}
 
 int main()
 {
 	cout << "Ah!" <<endl;
-	Graphl a(5);
-	a.setEdge(1,2,2);
-	a.setEdge(1,4,4);
-	a.setEdge(1,5,5);
-	a.setEdge(1,3,3);
-	a.delEdge(1,3);
-	a.delEdge(1,4);
-	Edge e1 = a.FirstEdge(2);
-	Edge e2 = a.NextEdge(e1);
+	Graphl a(2);
+	a.setEdge(1,0,1);
+	a.setEdge(0,1,1);
+	// a.setEdge(1,5,5);
+	// a.setEdge(1,3,3);
+	// a.setEdge(3,1,3);
+	// a.delEdge(1,3);
+	// a.delEdge(1,4);
+	Edge e1 = a.FirstEdge(1);
+	Edge e2 = a.FirstEdge(0);
 	Edge e3 = a.NextEdge(e2);
 	cout 	<< e1.from << "\t"
 			<< e1.to << "\t"
@@ -140,5 +188,8 @@ int main()
 	cout 	<< e3.from << "\t"
 			<< e3.to << "\t"
 			<< e3.weight << endl;
+	int temp = TopsortbyQueue(a);
+	cout << temp <<endl;
+
 	return 0;
 }
