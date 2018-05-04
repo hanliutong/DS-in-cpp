@@ -1,6 +1,11 @@
-#include <iostream>
-using namespace std;
-//邻接表表示无向带权图
+#ifndef _GRAPHLX_H
+#define _GRAPHLX_H
+
+//邻接表表示有向带权图
+
+enum Mark{UNVISITED,VISITED};
+
+
 
 class Edge{	//边
  public: 
@@ -17,6 +22,23 @@ class Edge{	//边
 	}
 };
 
+class Graph{
+	public: int numVertex;  int numEdge;  //顶点个数,边数
+		 int *Mark;	int *Indegree;  //访问数组,入度数组
+	Graph( int numVert ){
+		numVertex = numVert;
+		numEdge =0;
+		Indegree =new int[ numVertex ];
+		Mark = new int[ numVertex ];
+		for( int i=0; i<numVertex; i++){
+			Mark[i]=UNVISITED; 	Indegree[i]=0;}	}
+	// ~Graph( ){ delete [ ] Mark;	delete [ ] Indegree;	}
+	//~Graph( ){ 	}
+	int VerticesNum( ){	return numVertex; }
+	bool IsEdge(Edge oneEdge){  //判断oneEdge是否是边
+		if(oneEdge.weight >=0&&oneEdge.weight<65535
+			&&oneEdge.to>=0)	return true;
+		else return false;		}	};
 
 struct listUnit{  //弧结点的数据域
 	int vertex; //结点编号
@@ -26,7 +48,6 @@ struct listUnit{  //弧结点的数据域
 template<class Elem> class Link{      //弧结点
 	public: 	
 		Elem element; //数据域类型参数ElemlistUnit
-		bool Visited = 0;
 		Link *next;	      //指针域
   		Link(const Elem& elemval, Link *nextval=NULL){
   			element = elemval;
@@ -41,14 +62,13 @@ template <class Elem> class LList {   //链表头指针类
 		LList(){	head = new Link<Elem>( );	}//附加头结点	
 };
 
-class GraphL {  //邻接表类
+class GraphLX: public Graph {  //邻接表类
 	private:
 		LList<listUnit> *graList;  //边链表头指针数组
-	
 	public: 
-	GraphL(int numVert){
+	GraphLX(int numVert):Graph(numVert){
 		    graList = new LList<listUnit>[numVert]; 
-		}
+	}
 
 	void setEdge(int from, int to, int weight) {  //设置边  3/4
 		Link<listUnit> *t = graList[ from ].head; //边表首元
@@ -58,16 +78,12 @@ class GraphL {  //邻接表类
 			t->next =new Link<listUnit>;  //创建边
 			t->next ->element.vertex =to;
 			t->next->element.weight = weight;
-			// numEdge++; Indegree[to]++; 
-			setEdge(to,from,weight);//添加对应的边
+			numEdge++; Indegree[to]++; 
 			return;
 		}
 
 		if ( t->next->element.vertex == to){ //存在此边:改值
-			if (t->next->element.weight == weight)//存在此边
-				return;//退出（递归出口）
 			 t->next->element.weight=weight;  
-			 setEdge(to,from,weight);//修改对应的边
 			 return;
 		}
 
@@ -77,7 +93,7 @@ class GraphL {  //邻接表类
 			t->next->element.vertex = to;
 			t->next->element.weight = weight;
 			t->next->next = other;  //新边后继为other
-			setEdge(to,from,weight);//添加对应的边
+			numEdge++; Indegree[to]++; 
 			return;
 		}
 	}
@@ -93,7 +109,7 @@ class GraphL {  //邻接表类
 			Link<listUnit> *other=temp->next->next; //指后继
 			delete temp->next;  
 			temp->next = other ;  //维护逻辑关系
-			delEdge(to,from);//删除对应的边
+			numEdge--; Indegree[to]--; 
 			return;
 		}	
 	}
@@ -120,29 +136,6 @@ class GraphL {  //邻接表类
 			myEdge.weight = temp->next->element.weight; }
 		return myEdge;
 	}
-}; 
-
-int main()
-{
-	cout << "Ah!" <<endl;
-	GraphL a(6);
-	a.setEdge(1,2,2);
-	a.setEdge(1,4,4);
-	a.setEdge(1,5,5);
-	a.setEdge(3,1,3);
-	a.delEdge(1,3);
-	a.delEdge(4,1);
-	Edge e1 = a.FirstEdge(1);
-	Edge e2 = a.NextEdge(e1);
-	Edge e3 = a.NextEdge(e2);
-	cout 	<< e1.from << "\t"
-			<< e1.to << "\t"
-			<< e1.weight << endl;
-	cout 	<< e2.from << "\t"
-			<< e2.to << "\t"
-			<< e2.weight << endl;
-	cout 	<< e3.from << "\t"
-			<< e3.to << "\t"
-			<< e3.weight << endl;
-	return 0;
-}
+	// ~GraphLX( ){ delete [ ] Mark;	delete [ ] Indegree;	}
+};
+#endif //_GRAPHL_H
