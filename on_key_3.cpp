@@ -1,15 +1,12 @@
+#include <iostream>
+#include <string>
 #include "lnkStack.h"
 #include "lnkQueue.h"
-#include <iostream>
 #include "lnkList.h"
-#include <string>
-// #include <queue>
-#include "string.h"
 #include "BinaryTree.h"
-// #include "stdio.h"
 using namespace std;
 bool isOperator(char &x){
-	//cout << "\t\t\tDoing isOperator\n";
+	//判断输入是否为操作符
 	for (int i = 40; i <= 47; i++)
 	{
 		if (int(x) == i)
@@ -20,10 +17,8 @@ bool isOperator(char &x){
 	return 0;
 } 
 
-
-
 bool isDigital(char &x){
-	//cout << "\t\t\tDoing isDigital\n";
+	//判断输入是否为数字或小数点
 	if (int(x) == 46)// '.'
 	{
 		return 1;
@@ -38,8 +33,8 @@ bool isDigital(char &x){
 	return 0;
 }
 
-double  exp10(int x){
-	//cout << "\t\t\tDoing exp10\n";
+double  pow10(int x){
+	//乘10的x次幂
 	double sum = 1.0;
 	if (x >= 0)
 	{
@@ -61,7 +56,7 @@ double  exp10(int x){
 	
 }
 int getlens(string x){
-	//cout << "\t\t\tDoing getlens\n";
+	//获取字符串长度
 	int i = 0;
 	while ( x[i] != '=' )
 		{
@@ -70,11 +65,11 @@ int getlens(string x){
 	return i + 2;
 }
 
-double getDigital(string x,int &j){
-	//cout << "\t\t\tDoing getDigital" <<endl;
+double getDigit(string x,int &j){
+	//字符串中第一个数字
 	if (isDigital(x[0]) == 0)
 	{
-		cout << "err : getDigital error with front is not a digital" <<endl;
+		cout << "err : getDigit error with front is not a digit" <<endl;
 		exit(0);
 		return -1;
 	}
@@ -99,14 +94,12 @@ double getDigital(string x,int &j){
 			if (x[i] =='.')
 			{
 				dot = 1;
-				//cout << "dot = 1" << x[j] <<endl;
 			}
 			while (i)
 			{	
-				//cout << "sum = "<< sum <<endl;
 				--i;
 				temp.deQueue(y);
-				sum = sum + y*exp10(i);
+				sum = sum + y*pow10(i);
 			}
 		} else
 		{	i = j + 1;//从 ‘.’后面开始
@@ -121,22 +114,18 @@ double getDigital(string x,int &j){
 				exit(0);
 			}
 			int k=i-j-1;
-			//cout << "k = " << k << endl;
 			j = i;
 			while (k)
 			{
 				
 				temp_.pop(y);
-				//cout << k << " : " << y <<endl;
 				if (y != 0){
-				//cout << y <<"*10^"<<-k<<endl;
-				sum = sum + y*exp10(-k);}
+				sum = sum + y*pow10(-k);}
 				k--;
 			}
 
 		}
 	}
-	//cout  << "f_sum = "<< sum <<endl;	
  	return sum;
  }
 
@@ -151,24 +140,26 @@ int cpr_priority( int int_opr){
 		case int('(') : return 4;
 		case int(')') : return 5;
 		case int('=') : return 6;
-		default : {cout << "err: cpr_priority has an error in default :" << int_opr << "(ASCII)" << endl; exit(0);}
+		default : {
+			cout << "err: cpr_priority has an error in default :" 
+				<< int_opr << "(ASCII)" << endl; 
+			exit(0);
+		}
 	}
 }
 
 void string_del(string &str, int len){
-	// cout <<"doing string_del\n"; 
+	// 删除字符串前len位
 	for (int j = 0; j < len  ; j++)
 		{
 
-			for (int i = 0; i < getlens(str); i++)
-			{
+			for (int i = 0; i < getlens(str); i++)		
 			str[i] = str[i+1];
-			}
-			//cout << "正在删除" << temp << endl;
 		}
 }
 
 void getTwoDig(lnkStack<double> &s , double &s1 , double &s2){
+	//从栈中获得两个数字
 	if (s.isEmpty())
 	{
 		cout << "err : expect digital(s2)\n";
@@ -184,7 +175,7 @@ void getTwoDig(lnkStack<double> &s , double &s1 , double &s2){
 }
 
 void In2Post(string bef, lnkList<string> &Postfix )
-
+	//中缀字符串转后缀链表
 {	lnkStack<int> oprator;
 	oprator.push(-1);
 	int t_opr = -1;
@@ -204,7 +195,7 @@ void In2Post(string bef, lnkList<string> &Postfix )
 	{
 		if (isDigital(bef[0]))
 		{
-			temp = getDigital(bef,len);
+			temp = getDigit(bef,len);
 			char c[len];
 			sprintf(c, "%.1f", (double)temp);
 			string s = c;
@@ -264,7 +255,7 @@ void In2Post(string bef, lnkList<string> &Postfix )
 					oprator.push(opr);
 				}
 		}
-		else {cout << "warning : Illegal input has been ignored\n";string_del(bef,1);}
+		// else {cout << "warning : Illegal input has been ignored\n";string_del(bef,1);}
 	}//中值表达式入读结束
 	oprator.getTop(t_opr);//输出到栈空
 	while(t_opr != -1){
@@ -276,12 +267,10 @@ void In2Post(string bef, lnkList<string> &Postfix )
 			Postfix.append( str_tmp );
 		}
 	}
-
-	// cout << "后缀表达式 : ";
-	// Postfix.travel();
 }
 
 void Post2Tree(lnkList<string> &Postfix, BinaryTree<string> & Tree){
+	//后缀链表生成二叉树
 	lnkStack<BinaryTreeNode<string>*> Node;
 	string temp_Postfix_string;
 	BinaryTree<string> Tree_temp;
@@ -314,12 +303,13 @@ void Post2Tree(lnkList<string> &Postfix, BinaryTree<string> & Tree){
 
 }
 void Tree2In(BinaryTree<string> &tree){
-
+	//二叉树输出中缀表达式
 	BinaryTreeNode<string>* Root = tree.Root();
 	TreeNode2In(Root,0);
 }
 
 void TreeNode2In(BinaryTreeNode<string>*root,bool flag){
+	//根节点输出中缀表达式
 	int priority[4][4]={
 		{1,1,0,0},
 		{1,1,0,0},
@@ -357,12 +347,13 @@ void TreeNode2In(BinaryTreeNode<string>*root,bool flag){
 }
 
 void Post2Post(string Post, lnkList<string> &Postfix ){
+	//字符串后缀转链表后缀
 	double temp = 0;
 	int len = 0;
 
 	while (Post[0] != '='){
 		if (isDigital(Post[0])){
-			temp = getDigital(Post,len);
+			temp = getDigit(Post,len);
 			char c[len];
 			sprintf(c, "%.1f", (double)temp);
 			string s = c;
@@ -376,19 +367,20 @@ void Post2Post(string Post, lnkList<string> &Postfix ){
 			string_del(Post,1);
 		}
 		else{
-			cout << "warning : Illegal input has been ignored\n";
+			// cout << "warning : Illegal input has been ignored\n";
 			string_del(Post,1);
 		}
 	}
 }
 
 void Pre2Tree(string Post, BinaryTree<string> &t ){
+	//前缀字符串生成二叉树
 	lnkStack<string> str_Stack;
 	double temp = 0;
 	int len = 0;
 	while (Post[0] != '='){
 		if (isDigital(Post[0])){
-			temp = getDigital(Post,len);
+			temp = getDigit(Post,len);
 			char c[len];
 			sprintf(c, "%.1f", (double)temp);
 			string s = c;
@@ -402,7 +394,7 @@ void Pre2Tree(string Post, BinaryTree<string> &t ){
 			string_del(Post,1);
 		}
 		else{
-			cout << "warning : Illegal input has been ignored\n";
+			// cout << "warning : Illegal input has been ignored\n";
 			string_del(Post,1);
 		}
 	}
@@ -437,29 +429,35 @@ void Pre2Tree(string Post, BinaryTree<string> &t ){
     }
 
 }
-	lnkList<string> Postfix;
+
 int main(){
+	lnkList<string> Postfix;
 	BinaryTree<string> Tree;
 
-
 //————————————————————————————————用户输入——————————————————————————————————————————
-	string str = "- + / 1.0 - 2.0 / 30.0 3.0 + 40.0 55.0 * 0.1 66.0 =";//前缀
-	// string str = "1/(2-30/3)+(40+55)-0.1*66=";//中缀
+	// string str = "- + / 1.0 - 2.0 / 30.0 3.0 + 40.0 55.0 * 0.1 66.0 =";//前缀
+	// string str = "1/(2-30/3)+40+55-0.1*66=";//中缀
 	// string str = "1.0 2.0 30.0 3.0 / - / 40.0 55.0 + + 0.1 66.0 * - =";//后缀
+	string str = "";
+	int input = 0, output = 0;//0->前缀； 1->中缀； 2->后缀；
+	cout << "0->pre; 1->In; 2->Post" << endl;
+
+	cout << "input type = " ;
+	cin >> input;
+
+	cout << "input str : ";
+	cin.ignore(10,'\n');//忽略输入流中的换行符
+	getline(cin,str); 
+	cout << "your str is " << str <<endl;
 	
-	int input = 0;//0->前缀； 1->中缀； 2->后缀；
-	int output = 1;
-	// cout << "output = ";
-	// cin >> output;
-	// output = 2;
+	cout << "output type = ";
+	cin >> output;
+
 
 //————————————————————————————————用户输入——————————————————————————————————————————
-
-
+	
 	switch(input){
 		case 0 : {Pre2Tree(str,Tree); break;}
-		// case 1 : {lnkList<string> Postfix; In2Post(str,Postfix); Post2Tree(Postfix,Tree);break;}
-		// case 2 : {lnkList<string> Postfix; Post2Post(str,Postfix); Post2Tree(Postfix,Tree);break;}
 		case 1 : {In2Post(str,Postfix); Post2Tree(Postfix,Tree);break;}
 		case 2 : {Post2Post(str,Postfix); Post2Tree(Postfix,Tree);break;}
 		default : {cout << "Illegal input" << endl; exit(0);}
@@ -473,6 +471,7 @@ int main(){
 		case 2 : {Tree.PostOrder(Tree.Root());;break;}
 		default : {cout << "Illegal input" << endl; exit(0);}
 	}
+	cout << endl;
 
 	return 0;
 }

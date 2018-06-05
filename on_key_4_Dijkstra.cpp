@@ -71,7 +71,7 @@ void Dijkstra (GraphLX G, int s, Dist* &D){//s为初始顶点编号
 		
 		v = min_Dist(D, G.numVertex, G);//取最小:O(n)
 		G.Mark[v] = VISITED;
-		cout << v <<endl;//输出被选的点
+		// cout << v <<endl;//输出被选的点
 	}
 
 	for (int i = 0; i < G.numVertex; ++i)

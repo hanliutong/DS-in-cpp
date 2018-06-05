@@ -1,39 +1,49 @@
-#include <iostream>
+#include<iostream>
+
 using namespace std;
-int INF = 65525;
-int min_int (int array[],int n){
-	int min =INF;
-	for (int i = 0; i < n; ++i)
-	{
-		if (array[i] < min)
-		{
-			min = array[i];
-		}
-	}
-	return min;
+int col(int x,int y){
+	return y*y + x*x + 7*x;
+}
+
+int SI(int x,int y){
+		cout << "x = " << x << "\t y = " << y << endl;
+		int FO = col(x,y);
+		int FY = col(x,y+1);
+		int FX = col(x+1,y);
+		if (FO > FY && FY > FX ) SI(x+2,y);
+		if (FO > FX && FX > FY ) SI(x,y+2);
+		if (FO < FX && FX < FY ) SI(x,y-2);
+		if (FO < FY && FY < FX ) SI(x-2,y);
+		if (FY < FO && FO < FX ) SI(x-2,y+2);
+		if (FX < FO && FO < FY ) SI(x+2,y-2);
+		return 0;
 }
 
 
-class Dist{
-public:
-	int index = 0;//顶点编号
-	int len = 0;
-	int pre = 0;
-};
 
-int main()
-{	
-	int n = 5;
-	int **M;
-	M = new int *[n];
-	for (int i = 0; i < n; ++i)
-	{
-		M[i] = new int [n];
-	}
-	M[0][0] = 1;
-	
+int show (int x ,int y){
+	cout << col(x,y) << "\t";
+	cout << col(x+1,y) << "\t";
+	cout << col(x,y+1) << "\t" <<endl;
+	if (col(x+1,y) > col(x,y+1)) return 1;
+	if (col(x+1,y) < col(x,y+1)) return 2;
+	return 0;
+
+}
+
+
+
+int main(){
+
+int x = 5, y = 7;
+for (int i = 0; i < 17; ++i)
+{	cout << i << "\t";
+	if (show(x,y) == 1) x--;
+	else y--;
+	if (i == 15) cout << x << "\t" << y;
+}
 
 
 
 	return 0;
-}
+} 
