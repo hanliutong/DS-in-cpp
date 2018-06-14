@@ -2,6 +2,7 @@
 #include <queue>
 #include "GraphL.h"
 using namespace std;
+//prim算法求最小生成树
 const int INF = 655;
 class Dist{
 public:
@@ -34,7 +35,12 @@ void AddEdgetoMST(Edge edge, Edge* &MST , int n){
 	MST[n] = edge;
 	// cout << MST[n].from << "\t" << MST[n].to << "\t" << MST[n].weight  << endl;
 }
-
+void show_Dist (Dist* DistName,int DistNum){
+	cout << "index\tLength\tPre\n";
+	for (int i = 0; i<DistNum;i++){
+		cout << DistName[i].index <<"\t" << DistName[i].length << "\t" <<DistName[i].pre <<endl;
+	}
+}
 void Prim(GraphL& G, int s, Edge* &MST ) {
 	int MSTtag = 0; 	//最小支撑树边计数器
 	MST=new Edge[G.VerticesNum()-1];
@@ -57,8 +63,9 @@ for(Edge e= G.FirstEdge(v);G.IsEdge(e);e=G. NextEdge(e))
 		(D[e.to].length>e.weight )){ //v与To权更小
 		D[e.to].length = e.weight; //改D
 		D[e.to].pre = v;	}
-  v = minVertex( G, D);  // 调用“D数组中选最小”函数
+  v = minVertex(G, D);  // 调用“D数组中选最小”函数
 	G.Mark[v]=VISITED; //v标记为访问过
+	show_Dist(D,G.VerticesNum( ));
 	Edge edge(D[v].pre, D[v].index, D[v].length ); //建边
 	AddEdgetoMST( edge, MST, MSTtag++); //入MST		
 	}

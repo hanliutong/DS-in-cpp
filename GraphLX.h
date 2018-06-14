@@ -1,6 +1,6 @@
 #ifndef _GRAPHLX_H
 #define _GRAPHLX_H
-
+#include<queue>
 //邻接表表示有向带权图
 
 enum Mark{UNVISITED,VISITED};
@@ -34,6 +34,7 @@ class Graph{
 			Mark[i]=UNVISITED; 	Indegree[i]=0;}	}
 	// ~Graph( ){ delete [ ] Mark;	delete [ ] Indegree;	}
 	//~Graph( ){ 	}
+
 	int VerticesNum( ){	return numVertex; }
 	bool IsEdge(Edge oneEdge){  //判断oneEdge是否是边
 		if(oneEdge.weight >=0&&oneEdge.weight<65535
@@ -68,6 +69,9 @@ class GraphLX: public Graph {  //邻接表类
 	public: 
 	GraphLX(int numVert):Graph(numVert){
 		    graList = new LList<listUnit>[numVert]; 
+	}
+	int ToVertex(Edge e){
+		return e.to;
 	}
 
 	void setEdge(int from, int to, int weight) {  //设置边  3/4

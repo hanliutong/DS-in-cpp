@@ -4,6 +4,7 @@
 #include <cmath>
 #include "MaxHeap.h"
 using namespace std;
+
 template <class Record>
 void swap(Record Array[],int R ,int pivot){
 	Array[R] = Array[R] + Array[pivot];
@@ -54,7 +55,7 @@ void HeapSort( Record Array[ ], int n ) //堆排序HeapSort
 	}
 	for( int i=0; i<n; i++) 	
 	{	  //循环n-1次 找最大
-		Array[n-1-i] = max_heap.RemoveMax( );
+		Array[i] = max_heap.RemoveMax( );
 	}
 }
 
@@ -142,41 +143,87 @@ void AddrSort(Record* Array, int n, int first){
 
 
 
+template <class Record>
+void Merge(Record Array[ ], Record TempArray[ ], int left, int right,int middle) {  
+//归并[left..middle][middle+1..right][left..right]
+	for (int j=left; j<=right; j++)   TempArray[j] = Array[j];
+						// 将数组暂存入临时数组
+	int index1 = left;			    //左边子序列的起始位置
+	int index2 = middle+1;			//右子序列起始位置
+	int i = left;					//从左开始归并
+	while ( index1 <= middle && index2 <= right ){ //较小者入数组
+		if ( TempArray[index1]<TempArray[index2] )
+			Array[i++] = TempArray[index1++];
+		else	  Array[i++] = TempArray[index2++];  }
+	while (index1 <= middle)	 		//左序列有剩余，复制
+		Array[i++] = TempArray[index1++];
+	while (index2 <= right)    			 //右序列有剩余，复制
+		Array[i++] = TempArray[index2++];  	} 
+
+
+template <class Record>
+void MergeSort( Record Array[ ], Record TempArray[ ], int left, int right ){ 
+   if (left < right) { //若序列只有0或1个记录就不用排序
+	int middle=(left+right)/2;	//从中间划分为两个子序列
+	MergeSort(Array, TempArray, left, middle);	//递归左
+	MergeSort(Array, TempArray,middle+1,right); //递归右
+	Merge(Array, TempArray,left,right,middle);	 //归并
+	}
+} 
+
 
 int main()
 {	
-    // srand((unsigned)time(NULL));
-
-	// cout << sizeof(int) << "\t\n";
-	int n = 30000;
-	cout << "n = " << n << endl;
-	int a[n] = {0};
+   	int n = 0;
+	cout << "n = " ;
+	cin >> n;//输入排序元素个数n
+	int a[n] = {0};//初始化数组
 	int b[n] = {0};
 	int c[n] = {0};
+	int d[n] = {0};
+	cout << "n = " << n << endl;
+	srand(unsigned(time(0)));
 	for(int i=0;i<n;i++){
-		a[i] =  rand()%n*2;
+		a[i] =  int((rand()*rand())%(n*10)) ;
 		b[i] = a[i];
 		c[i] = a[i];
-	}
+		d[i] = a[i];
+	}//生成随机数组
+	// PrintRecord(a,n);
     clock_t  start_a = clock();
 	QuickSort(a,0,n-1);
 	clock_t  end_a = clock();
-	cout << "time_QuickSort = " << end_a - start_a << " ms"<<endl;//Θ(nlog n) 
-	// PrintRecord(a,n);
+	cout << "time_QuickSort_1= " << end_a - start_a << " ms"<<endl;//Θ(nlog n) 
 	
-	clock_t  start_b = clock();
+	// PrintRecord(a,n);
+	// PrintRecord(d,n);
+	int d_temp[n] = {0};
+	clock_t  start_d = clock();
+	MergeSort( d, d_temp, 0, n-1 );
+	clock_t  end_d = clock();
+	cout << "time_MergeSort = " << end_d - start_d << " ms" <<endl;//Θ(nlog n)
+	// PrintRecord(d,n);
+
+
+
+	
+    clock_t  start_b = clock();
 	HeapSort(b,n);
 	clock_t  end_b = clock();
-	cout << "time_HeapSort = " << end_b - start_b << " ms" <<endl;//Θ(nlog n)
+	cout << "time_HeapSort = " << end_b - start_b << " ms"<<endl;//Θ(nlog n) 
+	// PrintRecord(b,n);
+
+	start_a = clock();
+	QuickSort(b,0,n);
+	end_a = clock();
+	cout << "time_QuickSort_2= " << end_a - start_a << " ms"<<endl;//Θ(nlog n) 
 	// PrintRecord(b,n);
 
 	clock_t  start_c = clock();
-	RadixSort(c,n,6,9);
+	RadixSort(c,n,int(log10(n)+2),9);
 	clock_t  end_c = clock();
 	cout << "time_RadixSort = " << end_c - start_c << " ms" <<endl;//Θ(d ·(n+r))
 	// PrintRecord(c,n);
-	
+	system("pause");
 	return 0;
 }
-
-// oo000ooo
